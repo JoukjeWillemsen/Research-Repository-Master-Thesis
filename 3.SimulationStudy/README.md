@@ -1,0 +1,65 @@
+Instructions datareplication 
+===
+This README contains a detailled description of the simulationprocedure to replicate the obtained results. Please note that this simulation study has (last) been executed from 28-04-20 until 30-04-20.
+
+*	In case of a simulation study, the computer code that has been applied to simulate the data, including version number of the software, operation system of the machine, and the seed number of the random generator. 
+
+---
+**Obtaining the PRO-ACT database & datapreperation**
+---
+Please register, and download the PRO-ACT dataset [here](https://nctu.partners.org/ProACT/Data/Index/1). Only the variables concerning the allocation, survival and survivaltime are of interest. Cases that contain missingness in any of these variables are removed. Because most ALS-trials have a follow up of 18 months (548 days) or less, the variables Subject_Died and Death_Days are censored at 548 days.
+
+Recode the variables such that:
+
+* Study_Arm (Active/Placebo) -> D$TRT(Y/N)
+* Subject_Died (Yes/No) -> D$STATUS18(1,0)
+* Death_Days (number) -> D$STIME18(number, max 548)
+---
+**Run the rmd files saved in this folder in the right order**
+---
+
+To perform the entire analysis for the simulated scenarios A-F, the same simulationstudy is performed twice, but with different (varied) input parameters. 
+P
+* In simulationstudy A, the scenarios A,B,C1-3 and D1-3 are simulated.
+* In simulationstudy B, the scenarios A,B,E1-3 and F1-3 are simulated.
+
+Hence, there are two versions of every rmd file (except '0.DataPreperation'), either starting with "A." or "B.". 
+
+For both the simulation studies, run the rmd files stored in this folder starting from 'O.DataPreperation' to 'A/B.DataVisualization' in the right order as presented below: 
+
+| Files                      | Description   |
+| -----------------          | ------------- |
+|0.DataPreperation            |In this document the historical controldataset is prepared. The weibull shape and scale parameters are estimated from the historical controlgroup and the required sample size is calculated. The shape and scale parameter and sample size are used as input parameters in simulating the current control group.|
+|1.DataSimulation             |Simulate survivaldata based on the parameters extracted from 0.DataPreperation|
+|2.Poolingmethods:            |   |
+|- 2.1.Always pool             |All the simulated datasets are pooled with the historical controls|
+|- 2.2.Test-then-pool          |A HR difference test is perfomed to compare the current (simulated) current controls and the historical controls. The resulting p-values are stored|
+|- 2.3.Equivalence-testing HR |The CI of the HR difference test is calculated|
+|- 2.4.Equivalence-testing HR boot |The CI of the HR difference test is bootstrapped|
+|- 2.5.Equivalence-testing rMean |The CI of the RMST difference test is calculated|
+|- 2.5.Equivalence-testing rMean boot |The CI of the RMST difference test is bootstrapped|
+|3.FinalAnalysis   | Execute the final analysis (Experimental vs Controlgroup) for all the pooled and not-pooled datasets for a range of difference decisionthresholds|
+|4.DataAnalysis | Calculate and visualize the proportion of false positives and true positives for each poolingmethod
+
+At the end of every rmd file the raw data output is stored in the folder with the corresponding number (for example the output of '0.DataPreperation' is stored in the folder '0.DataPreperation_output'). At the start of the next rmd file the required data is extracted from these folders. A description of the folders stored in this folder is presented below:
+
+| Folder                     | Description   |
+| -----------------          | ------------- |
+|0.DataPreperation_output    |Raw data files, output from '0.DataPreperation|
+|1.DataSimulation_ouput      |Raw data files, output from the rmd files 'A.1.DataSimulation' and 'B.1.DataSimulation'|
+|2.PoolingMethods_ouput      |Raw data files, output from the rmd files staring with 'A.2' and 'B.2'|
+|3.FinalAnalysis_ouput       |Raw data files, output from the rmd files starting with 'A.3' and 'B.3'|
+|4.DataVisualization_ouput   |Raw data files, output from the rmd files starting with 'A.4' and 'B.4'|
+|Compiled HTMLs              |Compiled HTMLs of the rmd files as described above |
+|functions                   |contains R files with functions that are used multiple times in the rmd files described above|
+|vanEijk_functions           |contains R files with functions that are both not part of a package and not written by me, with a README file with a refference|
+
+The resulting graphs and proportions can be find in the folder '4.DataVisualization_ouput'.
+
+
+
+
+
+
+
+
