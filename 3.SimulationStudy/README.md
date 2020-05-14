@@ -64,7 +64,7 @@ Operating system and package versions
 The package versions of the R-packages applied in this simulationstudy are stated below. The operation system of the computer is Windows 10 Home, 64-bit. The simulation study is performed in R, version 3.6.2 (Rstudio version 1.1.456). The approximated runningtime for both the simulationstudies (all the rmd. files in this folder) is 28 hours, which is largely due to the long runningtime of `A.2.4.Equivalence-testing HR boot`, `B.2.4.Equivalence-testing HR boot`, `A.2.5.Equivalence-testing rMean boot` and `B.2.5.Equivalence-testing rMean boot`.
 
 
-| R-package                  | Package version | Cite |
+| R-package                  | Package version | Reference  |
 | -----------------          | -------------       | ------------- |
 | `Survival`                 |3.1.8                | Therneau T (2015). _A Package for Survival Analysis in S_. version 2.38, <URL: https://CRAN.R-project.org/package=survival>.|
 | `Boot`                     |1.3.23         | Angelo Canty and Brian Ripley (2019). boot: Bootstrap R (S-Plus) Functions. R package version 1.3-23.|
