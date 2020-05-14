@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1581854852917.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4269994032",
+    "id" : "6ACFD62D",
+    "lastKnownWriteTime" : 1581931687,
+    "last_content_update" : 1581931687058,
+    "path" : "~/MasterThesis/R/Rscript CDF maken.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "61,2",
+        "scrollLine" : "28",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

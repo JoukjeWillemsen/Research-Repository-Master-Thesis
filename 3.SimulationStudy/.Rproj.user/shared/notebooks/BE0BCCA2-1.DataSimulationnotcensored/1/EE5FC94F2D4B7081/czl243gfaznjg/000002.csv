@@ -1,0 +1,5 @@
+"0","shapeparameter = parameters$shape"
+"0","scaleparameter = c(parameters$scale, parameters$scale+30) #+hoeveel? navragen"
+"0","treatmenteffect = 3 #navragen"
+"0","sdrandomeffectpatient = 0 #2.18 navragen, verandert de distribution bij toevoegen variantie?"
+"0","sdrandomeffectcluster = c(0, 0.1, 0.2, 0.4) #navragen"

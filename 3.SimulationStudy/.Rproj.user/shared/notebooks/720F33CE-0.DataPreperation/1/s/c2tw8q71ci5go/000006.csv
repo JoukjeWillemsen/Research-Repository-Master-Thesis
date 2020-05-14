@@ -1,0 +1,38 @@
+"0","eweibull(Dcontrol$STIME18)"
+"1","
+Results of Distribution Parameter Estimation
+"
+"1","--------------------------------------------
+
+"
+"1","Assumed Distribution:"
+"1","            "
+"1","Weibull"
+"1","
+
+"
+"1","Estimated Parameter(s):"
+"1","          "
+"1","shape =   2.559648
+                                 scale = 401.425498"
+"1","
+
+"
+"1","Estimation Method:"
+"1","               "
+"1","mle"
+"1","
+
+"
+"1","Data:"
+"1","                            "
+"1","Dcontrol$STIME18"
+"1","
+
+"
+"1","Sample Size:"
+"1","                     "
+"1","2889"
+"1","
+
+"

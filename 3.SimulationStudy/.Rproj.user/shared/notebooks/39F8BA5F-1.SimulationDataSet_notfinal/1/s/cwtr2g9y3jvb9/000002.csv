@@ -1,0 +1,13 @@
+"0","```r
+replicatedatasets <- function(scaleparameter, sdrandomeffectcluster, nrep = 1000){
+  
+set.seed(123)
+namedata <- list()
+for(i in 1:nrep){
+  tmp <- Data11 <- TimeUntilMortality(scaleparameter = scaleparameter, sdrandomeffectcluster = sdrandomeffectcluster)
+  name <- paste('iteration:',i,sep='')
+  namedata[[name]] <- tmp
+}
+return(namedata)
+}
+```"

@@ -1,0 +1,3 @@
+"0","parameters <- list(shape = fitcens$estimate[1], scale = fitcens$estimate[2])"
+"0","save(parameters, file = ""Parameters.Rdata"")"
+"0","save(Dcontrol, file = ""Historicaldata.RData"")"

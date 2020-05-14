@@ -1,0 +1,10 @@
+"0","```r
+```r
+#Randomly sampling (with replacement) from the observed data to obtain new samples of the same size. Bootstrapping was performed using the \boot\ function from the \boot\ package in R
+
+
+
+
+
+```
+```"

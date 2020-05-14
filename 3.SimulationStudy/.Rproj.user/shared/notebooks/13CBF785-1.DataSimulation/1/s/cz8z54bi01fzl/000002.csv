@@ -1,0 +1,4 @@
+"0","#save(data, file = ""SimulatedDataSet.Rdata"")"
+"0","#save.image(""Results1.RData"")"
+"0","#load(""Results1.RData"")"
+"0","save(ALLdata, file=""SimulatedData"")"

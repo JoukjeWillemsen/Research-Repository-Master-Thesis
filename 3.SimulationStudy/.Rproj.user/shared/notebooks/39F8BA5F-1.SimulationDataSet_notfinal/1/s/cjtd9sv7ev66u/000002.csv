@@ -1,0 +1,16 @@
+"0","```r
+sumlist
+
+```"
+"1","function(list){
+
+sum <- vector(length = 100)
+
+for(i in 1:100){
+ subset <- list[[i]]
+ sum[i] <- sum(subset$StatusIndicator)
+}
+ mean_sum <- mean(sum)  
+ return(mean_sum)
+}
+"

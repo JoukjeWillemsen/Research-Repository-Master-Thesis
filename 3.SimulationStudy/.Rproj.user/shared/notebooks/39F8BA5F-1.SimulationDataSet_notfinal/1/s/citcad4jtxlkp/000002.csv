@@ -1,0 +1,7 @@
+"0","```r
+shapeparameter = 2.56
+scaleparameter = c(401,403) #navragen
+treatmenteffect = 3 #navragen
+sdrandomeffectpatient = 2.18 #navragen
+sdrandomeffectcluster = c(0, 0.1, 0.2, 0.4) #navragen
+```"

@@ -1,0 +1,7 @@
+"0","```r
+plot(CI, main = \"Plot of Survival Curves by treatment\", xlab = \"Length of Survival\",ylab=\"Proportion of Individuals who have Survived\",col=c(\"blue\",\"red\"))
+
+```"
+"1","Error in xy.coords(x, y, xlabel, ylabel, log) : 
+  'x' is a list, but does not have components 'x' and 'y'
+"

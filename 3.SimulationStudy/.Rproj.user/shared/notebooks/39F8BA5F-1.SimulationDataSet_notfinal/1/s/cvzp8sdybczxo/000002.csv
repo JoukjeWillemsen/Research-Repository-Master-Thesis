@@ -1,0 +1,11 @@
+"0","```r
+```r
+# Test of proportional hazards assumption
+coxph.test <- coxph(Surv(Dcontrol$STIME18, event=Dcontrol$STATUS18) ~ 1, data = Dcontrol)
+
+coxph.test2 <- coxph(Surv(D$STIME18, event = D$STATUS18)~D$TRT)
+
+
+basehaz(coxph.test)
+```
+```"

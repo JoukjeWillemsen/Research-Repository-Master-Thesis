@@ -1,0 +1,14 @@
+"0","```r
+library(dplyr)
+#library(ISLR)
+#library(tidyverse)
+#library(haven)
+#library(readxl)
+sdrandomeffectpatient = 2
+sdrandomeffectcluster = 0.1
+set.seed(123)
+#Generate random effect patient
+Data$randomeffectpatient <- Data %>% nrow() %>% rnorm(mean = 0, sd = sdrandomeffectpatient)
+#Generate random effect cluster
+Data$randomeffectcluster <- rnorm(1, mean = 0, sd = sdrandomeffectcluster)
+```"

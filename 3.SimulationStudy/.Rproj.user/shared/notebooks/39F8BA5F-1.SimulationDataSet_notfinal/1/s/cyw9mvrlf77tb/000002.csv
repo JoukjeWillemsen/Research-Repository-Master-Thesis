@@ -1,0 +1,6 @@
+"0","```r
+Survival <- Surv(time=Data$survivalcensored, event=Data$StatusIndicator)
+Survival_survfit <- survfit(Survival~1)
+plot(Survival_survfit, main = \"Plot of Survival Curve for ALS Patients\",
+xlab = \"Length of Survival in years\", ylab = \"Proportion of Individuals who have Survived\")
+```"

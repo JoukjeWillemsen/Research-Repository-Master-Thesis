@@ -1,0 +1,49 @@
+"0","set.seed(123)"
+"0","Data11 <- TimeUntilMortality(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[1])"
+"0","eweibull(Data11[Data11$allocation==1,]$TUM)"
+"1","
+Results of Distribution Parameter Estimation
+"
+"1","--------------------------------------------
+
+"
+"1","Assumed Distribution:"
+"1","            "
+"1","Weibull"
+"1","
+
+"
+"1","Estimated Parameter(s):"
+"1","          "
+"1","shape =   2.851985
+                                 scale = 123.585278"
+"1","
+
+"
+"1","Estimation Method:"
+"1","               "
+"1","mle"
+"1","
+
+"
+"1","Data:"
+"1","                            "
+"1","Data11[Data11$allocation == 1, ]$TUM"
+"1","
+
+"
+"1","Sample Size:"
+"1","                     "
+"1","150"
+"1","
+
+"
+"0","Data12 <- TimeUntilMortality(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[2])"
+"0","#eweibull(Data12$TUM)"
+"0","Data13 <- TimeUntilMortality(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[3])"
+"0","#eweibull(Data13$TUM)"
+"0","Data14 <- TimeUntilMortality(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[4])"
+"0","Data21 <- TimeUntilMortality(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[1])"
+"0","Data22 <- TimeUntilMortality(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[2])"
+"0","Data23 <- TimeUntilMortality(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[3])"
+"0","Data24 <- TimeUntilMortality(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[4])"

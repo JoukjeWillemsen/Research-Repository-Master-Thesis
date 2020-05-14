@@ -1,0 +1,10 @@
+"0","```r
+```r
+library(EnvStats)
+
+fc <- function(d, i){
+  x<-eweibull(d[i])
+	return(x$parameters[2])
+}
+```
+```"

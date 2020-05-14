@@ -1,0 +1,8 @@
+"0","ResultsEqTest <- list(""Data11"" = eqHRmatrix(Hcontrol[[1]]), "
+"0","                      ""Data12"" = eqHRmatrix(Hcontrol[[2]]),"
+"0","                      ""Data13"" = eqHRmatrix(Hcontrol[[3]]),"
+"0","                      ""Data14"" = eqHRmatrix(Hcontrol[[4]]),"
+"0","                      ""Data21"" = eqHRmatrix(Hcontrol[[5]]), "
+"0","                      ""Data22"" = eqHRmatrix(Hcontrol[[6]]),"
+"0","                      ""Data23"" = eqHRmatrix(Hcontrol[[7]]),"
+"0","                      ""Data24"" = eqHRmatrix(Hcontrol[[8]]))"

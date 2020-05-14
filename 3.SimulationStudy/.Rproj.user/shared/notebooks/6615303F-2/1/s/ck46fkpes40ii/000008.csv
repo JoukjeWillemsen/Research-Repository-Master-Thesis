@@ -1,0 +1,5 @@
+"0","#Make subset with only controls
+Hcontrol <- list (for a in 1:8) {c(
+"
+"2","Error: unexpected symbol in ""Hcontrol <- list (for a""
+"

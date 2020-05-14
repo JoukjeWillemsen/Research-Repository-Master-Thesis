@@ -1,3 +1,0 @@
-1.	Arrangements have been made such that for each Research Master's student, a research archive package is stored on submission of the Master's thesis. The student is responsible for preparing the package. The supervisor is responsible for storing archives compiled as part of a one-year Master's research or Bachelor's research.
-2.	It is formally described who has access to research archive. Open Access is supported.
-3.	Duration of storage is arranged in accordance with regulations (minimum 10 years; medical data at least 15 years).

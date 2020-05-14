@@ -1,0 +1,74 @@
+https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best
+
+# Make dataframe historical data as input for function
+dD <- data.frame(
+  left=ifelse(Dcontrol$STIME18 >= 548, 548, Dcontrol$STIME18), # Assign left side as x.max when censored
+  right= ifelse(Dcontrol$STIME18 >= 548, NA, Dcontrol$STIME18)   # Assign right side as NA when censored
+)
+
+# Make dataframe current data as input for function
+dC <- data.frame(
+  left=ifelse(Hcontrol[[1]][[1]]$survivalcensored >= 548, 548, Hcontrol[[1]][[1]]$survivalcensored), # Assign right side as x.min when censore
+  right= ifelse(Hcontrol[[1]][[1]]$survivalcensored >= 548, NA, Hcontrol[[1]][[1]]$survivalcensored)   # Assign left side as NA when censored
+)
+
+fitcens_hist <- fitdistcens(dD, "weibull",  start = list(shape=3,scale=300)) #fit weibull distribution to censored 
+fitcens_hist
+#shape   2.102168
+#scale 426.582667
+
+fitcens_cur <- fitdistcens(dC, "weibull",  start = list(shape=3,scale=300)) #fit weibull distribution to censored 
+#shape   2.107521
+#scale 424.659506
+
+library(fitdistrplus)
+library(logspline)
+#install.packages("logspline")
+x<- Dcontrol$STIME18
+  
+#descdist(x, discrete = FALSE)
+fitdistcens(dD, "weibull",  start = list(shape=3,scale=300)) 
+descdist(x, discrete = FALSE)
+
+fit.weibull <- fitdistcens(dD, "weibull",  start = list(shape=3,scale=300))
+fit.norm <- fitdistcens(dD, "norm")
+
+plot(fit.norm)
+plot(fit.weibull)
+
+fit.weibull$aic #iets beter, maar heeeel groot!
+fit.norm$aic
+
+
+n.sims <- 5e2
+stats <- replicate(n.sims, {      
+  r <- rweibull(n = length(x)
+                , shape= fit.weibull$estimate["shape"]
+                , scale = fit.weibull$estimate["scale"]
+  )
+  censoring <- ifelse(r>548, yes = 1, no = 0)
+  #r_cens <- ifelse(r>548, yes = 548, no = r)
+  r_cens <- data.frame(
+    left=ifelse(r >= 548, 548, r), # Assign left side as x.max when censored
+    right= ifelse(r >= 548, NA, r)   # Assign right side as NA when censored
+  )
+  
+  estfit.weibull <- fitdistcens(r_cens, "weibull", start = list(shape=3,scale=300)) # added to account for the estimated parameters
+  as.numeric(ks.test(r_cens
+                     , "pweibull"
+                     , shape= estfit.weibull$estimate["shape"]
+                     , scale = estfit.weibull$estimate["scale"])$statistic
+  )      
+})
+
+plot(ecdf(stats), las = 1, main = "KS-test statistic simulation (CDF)", col = "darkorange", lwd = 1.7)
+grid()
+
+fit <- logspline(stats)
+
+1 - plogspline(ks.test(x
+                       , "pweibull"
+                       , shape= fit.weibull$estimate["shape"]
+                       , scale = fit.weibull$estimate["scale"])$statistic
+               , fit
+)

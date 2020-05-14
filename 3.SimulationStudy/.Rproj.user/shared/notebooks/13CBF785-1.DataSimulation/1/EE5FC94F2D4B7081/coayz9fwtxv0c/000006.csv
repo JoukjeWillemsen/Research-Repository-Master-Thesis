@@ -1,0 +1,39 @@
+"0","eweibull(Data11[Data11$allocation==1,]$TUM)
+"
+"1","
+Results of Distribution Parameter Estimation
+"
+"1","--------------------------------------------
+
+"
+"1","Assumed Distribution:"
+"1","            "
+"1","Weibull"
+"1","
+
+"
+"1","Estimated Parameter(s):"
+"1","          "
+"1","shape =   2.438473
+                                 scale = 123.351555"
+"1","
+
+"
+"1","Estimation Method:"
+"1","               "
+"1","mle"
+"1","
+
+"
+"1","Data:"
+"1","                            "
+"1","Data11[Data11$allocation == 1, ]$TUM"
+"1","
+
+"
+"1","Sample Size:"
+"1","                     "
+"1","150"
+"1","
+
+"

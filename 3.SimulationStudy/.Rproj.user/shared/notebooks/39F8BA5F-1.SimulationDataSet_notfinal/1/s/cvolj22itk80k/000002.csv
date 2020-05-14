@@ -1,0 +1,73 @@
+"0","```r
+```r
+#bootstrap:
+
+#install.packages(\boot\,dep=TRUE)
+library(EnvStats)
+fc <- function(d, i){
+  x<-eweibull(d[i])
+	return(x$parameters[2])
+}
+
+
+library(boot)
+set.seed(100)
+bootobject<-boot(Dcontrol$STIME18, statistic = fc, R=4000)
+plot(bootobject)
+boot.ci(bootobject, conf=0.95)
+
+####dit is de variantie in surivaltimes.... niet de variantie van de scale parameter!!)
+sigma2 <- var(Dcontrol$STIME18, na.rm = TRUE)
+sigma <- sqrt(sigma2)
+sigma
+
+
+STIMEYEARS18 <- (Dcontrol$STIME18)/356
+eweibull(STIMEYEARS18)
+
+#hazard rate:
+t=548
+h0<- y*t^(y-1)/(l^y)
+
+
+
+#A Cox regression of time to death on the time-constant covariates is specified as follow:
+library(surival)
+library(ggplot2)
+Surv<-Surv(time=Dcontrol$STIME18, event=Dcontrol$STATUS18)
+fit <- survfit(Surv ~ 1)
+ggsurvplot(surv_summary(fit), color = \#2E9FDF\, ylim = c(0.5,1),
+           ggtheme = theme_minimal())
+
+#plot mooier maken: https://rpkgs.datanovia.com/survminer/reference/ggsurvplot.html
+
+
+# Test of proportional hazards assumption
+coxph.test <- coxph(Surv(Dcontrol$STIME18, event=Dcontrol$STATUS18) ~ 1, data = Dcontrol)
+
+coxph.test2 <- coxph(Surv(D$STIME18, event = D$STATUS18)~D$TRT)
+
+
+basehaz(coxph.test)
+
+
+
+lm1 <- lm(Fertility ~ . , data = swiss)
+AIC(lm1)
+stopifnot(all.equal(AIC(lm1),
+                    AIC(logLik(lm1))))
+BIC(lm1)
+
+lm2 <- update(lm1, . ~ . -Examination)
+AIC(lm1, lm2)
+BIC(lm1, lm2)
+
+
+lm1<-lm(Dcontrol$STIME18~1)
+lm2<-lm(Dcontrol$STIME~1)
+
+AIC(lm1,lm2)
+BIC(lm1,lm2)
+
+```
+```"

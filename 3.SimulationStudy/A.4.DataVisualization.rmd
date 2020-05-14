@@ -1,9 +1,29 @@
 ---
-title: "Untitled"
+title: "Data visualization plots scenario A-D"
 author: "Joukje Willemsen"
-date: "4 mei 2020"
+date: "14-05-2020"
 output: html_document
 ---
+
+In this document the TPR/FPR plots are created for every poolingmethod and every decisionthreshold in every simulated scenario, referred to as A, B, C1-3 and D1-3 in the article.
+
+Please note that:
+
+Data11 = Scenario A
+
+Data12 = Scenario C1
+
+Data13 = Scenario C2
+
+Data14 = Scenario C3
+
+Data21 = Scenario B
+
+Data22 = Scenario D1
+
+Data23 = Scenario D2
+
+Data24 = Scenario D3
 
 #Load packages
 ```{r}
@@ -13,12 +33,12 @@ library(ggplot2)
 library(cowplot)
 ```
 
+#Make a function that calculates how many datasets are pooled
 ```{r}
 npool <- function(dataset, dat=1){
-  #PoolDecisions$TTP = PoolDecisions$TTP
-propvector<-vector()
+propvector<-vector()#Make a vector to store the proportions
 for (i in 1:length(dataset)){
-  propvector[i]<-sum(dataset[[i]][[dat]]=="pool")
+  propvector[i]<-sum(dataset[[i]][[dat]]=="pool")#store the proportion in propvector
 }
 return(propvector/1000)
 }
@@ -26,12 +46,12 @@ return(propvector/1000)
 
 #Make a function that returns a vector with the TPs, and a vector with the FPs for the indicated dataset
 ```{r}
-makeDF <- function(proportions, dat=1){ #example: proportions$PHR
-TP <- vector()
-FP <- vector()
+makeDF <- function(proportions, dat=1){
+TP <- vector() #a vector to store the true positive rate
+FP <- vector() #a vector to store the false positive rate
 for (i in 1:length(proportions)){
-TP[i] = proportions[[i]][dat,3]
-FP[i] = proportions[[i]][dat,4]
+TP[i] = proportions[[i]][dat,3] #substract the TP from the proportions dataset
+FP[i] = proportions[[i]][dat,4] #substract the FP from the proportions dataset
 }
 data <- data.frame(TP = TP, FP=FP)
 return(data)
@@ -40,64 +60,67 @@ return(data)
 ```
 
 #######################################
-############# HR ######################
+####### HR as final analysis###########
 #######################################
 
 #Load output from 3.FinalAnalysis
 ```{r}
 load("3.FinalAnalysis_output/3.ProportionsTPFPHR.Rdata")
 load("3.FinalAnalysis_output/3.DecisionsFinalAnalysesHR.Rdata")
-#load("3.FinalAnalysis_output/3.Pooldecisions700HR.Rdata") 
 load("3.FinalAnalysis_output/3.Pooldecisions400HR.Rdata") 
 ```
 
-#Make a function to return FP/TP plot
+#Make a function to return FPR/TPR plot
 ```{r}
+#specify the colours
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 makeROCplot <- function(dat = 1, setxaxis, FPalwayspool, FPneverpool, TPalwayspool, TPneverpool)
 {
+
+#organize the input data for the different poolingmethods
 data <- list()
-#data$TP <- rowbind()
-
-
 data$TTP <- makeDF(proportions$PPTTP, dat = dat)
 data$PRmeanbootdiff <- makeDF(proportions$PRMEANbootdiff, dat = dat)
 data$PRMEANdiff <- makeDF(proportions$RMEANdiff, dat = dat)
 data$PHRboot <- makeDF(proportions$PHRboot, dat = dat)
 data$PHR <- makeDF(proportions$PHR, dat = dat)
 
+#organize the input data for "alwayspool" and "neverpool"
 points <- data.frame(
   "method" =  c("AlwaysPool", "NeverPool"),
   "FP" = c(FPalwayspool, FPneverpool),
   "TP" = c(TPalwayspool, TPneverpool))
   
+#Make the plot
 plot <- ggplot(data$PHR, aes(x=FP, y=TP))+
   
+  #add lines
   geom_path(data= data$TTP, aes(x=FP, y=TP, colour = "HRdiff"), size = 1, show.legend = TRUE)+
   geom_path(data= data$PRmeanbootdiff, aes(x=FP, y=TP, colour = "RMSTboot"), size = 1, show.legend = TRUE)+
   geom_path(data= data$PRMEANdiff, aes(x=FP, y=TP, colour = "RMST"), size = 1)+
   geom_path(data= data$PHRboot, aes(x=FP, y=TP, colour = "HRboot"), size = 1)+
   geom_path(data= data$PHR, aes(x=FP, y=TP, colour = "HReq"), size = 1)+
 
+  #add datapoints
   geom_point(data= data$TTP, aes(x=FP, y=TP, colour = "HRdiff"), size = 3)+
   geom_point(data= data$PRmeanbootdiff, aes(x=FP, y=TP, colour = "RMSTboot"), size = 3)+
   geom_point(data= data$PRMEANdiff, aes(x=FP, y=TP, colour = "RMST"), size = 3)+
   geom_point(data= data$PHRboot, aes(x=FP, y=TP, colour = "HRboot"), size = 3)+
   geom_point(data= data$PHR, aes(x=FP, y=TP, colour = "HReq"), size = 3)+
   
+  #add datapoints always & never pool
   geom_point(data= points[1,], aes(x=FP, y=TP, shape = "Alwayspool"), colour = "black", size = 4)+
   geom_point(data= points[2,], aes(x=FP, y=TP, shape = "Neverpool"), colour = "black", size = 4)+
   
+  #legend
   scale_shape_manual("", breaks = c("Alwayspool" = "Alwayspool", "Neverpool" = "Neverpool"), values = c(16,17)) +
   guides(linetype=FALSE) +
-  
   guides(shape = guide_legend(override.aes = list(linetype = 0)))+
-
   scale_color_manual("", breaks = c("HRdiff" = "HRdiff", "RMSTboot"= "RMSTboot", "RMST" = "RMST", "HRboot" ="HRboot", "HReq" = "HReq"), values=cbPalette)+
-  
   labs(colour="",linetype="",shape="")+
   
+  #set x-axis
   coord_cartesian(xlim = setxaxis) + 
 
 theme_cowplot(12)
@@ -127,20 +150,20 @@ D23 <- makeROCplot(dat = 7, setxaxis = c(0.04,0.3), FPalwayspool = proportions$P
 
 D24 <- makeROCplot(dat = 8, setxaxis = c(0.04,0.45), FPalwayspool = proportions$PAlwaysPool[8,4], FPneverpool = proportions$PNeverPool[8,4], TPalwayspool = proportions$PAlwaysPool[8,3], TPneverpool = proportions$PNeverPool[8,3]) #4,2
 
+#arrange the plots in one big plot
 arrangedfigure <- ggpubr::ggarrange(D11, D21, D12, D22, D13, D23, D14, D24, 
-#         labels = c("D11", "D21", "D12", "D22", "D13", "D23", "D14", "D24"),
-         labels = c(" A ", " B ","C1", "D1", "C2", "D2", "C3", "D3"),
-           ncol = 2, nrow = 4, common.legend = TRUE, vjust = +0.2, hjust = -1.6, align = "hv", legend = "bottom")
+         labels = c(" A ", " B ","C1", "D1", "C2", "D2", "C3", "D3"), #add lables
+          ncol = 2, nrow = 4, common.legend = TRUE, vjust = +0.2, hjust = -1.6, align = "hv", legend = "bottom")
 
+# add the text around the plots
 annotatedfigureHR <- ggpubr::annotate_figure(arrangedfigure, 
                top = ggpubr::text_grob(expression(paste(lambda["c"],"= 776.89                                   ",lambda["c"],"= 876.89")), face = "bold", size = 20), 
               left = ggpubr::text_grob(expression(paste(sigma["s"],"=0.4                ", sigma["s"], "=0.2                ", sigma["s"], "=0.1                ", sigma["s"], "=0")), face = "bold", size = 20, rot = 90))
 
+#show the plot
 annotatedfigureHR
 
 ```
-colnames(Npool) <- c('scalepar = 429', 'scalepar = 403')
-rownames(Npool) <- c('sdrandomcluster = 0', 'sdrandomcluster = 0.1', 'sdrandomcluster = 0.2','sdrandomcluster = 0.4')
 
 #######################################
 ############# RMST ####################
@@ -148,38 +171,21 @@ rownames(Npool) <- c('sdrandomcluster = 0', 'sdrandomcluster = 0.1', 'sdrandomcl
 
 #Load output from 3.FinalAnalysis
 ```{r}
-#load("3.FinalAnalysis_output/3.ProportionsTPFPHR.Rdata")
-#load("3.FinalAnalysis_output/3.DecisionsFinalAnalysesHR.Rdata")
-#load("3.FinalAnalysis_output/3.Pooldecisions700HR.Rdata")
-
 load("3.FinalAnalysis_output/3.ProportionsTPFPrmean3.Rdata") 
-#load("3.FinalAnalysis_output/3.DecisionsFinalAnalyses700rmean3.Rdata")
 load("3.FinalAnalysis_output/3.Pooldecisions400rmean3.Rdata") 
-#load("3.FinalAnalysis_output/3.Pooldecisionsrmean3.Rdata") 
 load("3.FinalAnalysis_output/3.DecisionsFinalAnalyses400rmean3.Rdata")
-```
-
-#Make a function that returns a vector with the TPs, and a vector with the FPs for the indicated dataset
-```{r}
-makeDF <- function(proportions, dat=1){ #example: proportions$PHR
-TP <- vector()
-FP <- vector()
-for (i in 1:length(proportions)){
-TP[i] = proportions[[i]][dat,3]
-FP[i] = proportions[[i]][dat,4]
-}
-data <- data.frame(TP = TP, FP=FP)
-return(data)
-}
-#plot(TP, FP)
 ```
 
 #Make a function to return FP/TP plot
 ```{r}
+#color pallette
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
+#start function
 makeROCplot <- function(dat = 1, setxaxis, FPalwayspool, FPneverpool, TPalwayspool, TPneverpool)
 {
+  
+#organize input data for poolingmethods
 data <- list()
 data$TTP <- makeDF(proportions$PPTTP, dat = dat)
 data$PRmeanbootdiff <- makeDF(proportions$PRMEANbootdiff, dat = dat)
@@ -187,40 +193,44 @@ data$PRMEANdiff <- makeDF(proportions$RMEANdiff, dat = dat)
 data$PHRboot <- makeDF(proportions$PHRboot, dat = dat)
 data$PHR <- makeDF(proportions$PHR, dat = dat)
 
+#organize input data for "always pool" and "never pool"
 points <- data.frame(
   "method" =  c("AlwaysPool", "NeverPool"),
   "FP" = c(FPalwayspool, FPneverpool),
   "TP" = c(TPalwayspool, TPneverpool))
   
+#make plot
 plot <- ggplot(data$PHR, aes(x=FP, y=TP))+
   
+  #add lines poolingmethods
   geom_path(data= data$TTP, aes(x=FP, y=TP, colour = "HRdiff"), size = 1, show.legend = FALSE)+
   geom_path(data= data$PRmeanbootdiff, aes(x=FP, y=TP, colour = "RMSTboot"), size = 1, show.legend = FALSE)+
   geom_path(data= data$PRMEANdiff, aes(x=FP, y=TP, colour = "RMST"), size = 1, show.legend = FALSE)+
   geom_path(data= data$PHRboot, aes(x=FP, y=TP, colour = "HRboot"), size = 1, show.legend = FALSE)+
   geom_path(data= data$PHR, aes(x=FP, y=TP, colour = "HReq"), size = 1, show.legend = FALSE)+
 
+  #add datapoints poolingmethods
   geom_point(data= data$TTP, aes(x=FP, y=TP, colour = "HRdiff"), size = 3, show.legend = FALSE)+
   geom_point(data= data$PRmeanbootdiff, aes(x=FP, y=TP, colour = "RMSTboot"), size = 3, show.legend = FALSE)+
   geom_point(data= data$PRMEANdiff, aes(x=FP, y=TP, colour = "RMST"), size = 3, show.legend = FALSE)+
   geom_point(data= data$PHRboot, aes(x=FP, y=TP, colour = "HRboot"), size = 3, show.legend = FALSE)+
   geom_point(data= data$PHR, aes(x=FP, y=TP, colour = "HReq"), size = 3, show.legend = FALSE)+
   
+  #add datapoints "alwayspool" and "neverpool"
   geom_point(data= points[1,], aes(x=FP, y=TP, shape = "Alwayspool"), colour = "black", size = 4, show.legend = FALSE)+
   geom_point(data= points[2,], aes(x=FP, y=TP, shape = "Neverpool"), colour = "black", size = 4, show.legend = FALSE)+
   
+  #legend
   scale_shape_manual("", breaks = c("Alwayspool" = "Alwayspool", "Neverpool" = "Neverpool"), values = c(16,17)) +
   guides(linetype=FALSE) +
-  
   guides(shape = guide_legend(override.aes = list(linetype = 0)))+
-
   scale_color_manual("", breaks = c("HRdiff" = "HRdiff", "RMSTboot"= "RMSTboot", "RMST" = "RMST", "HRboot" ="HRboot", "HReq" = "HReq"), values=cbPalette)+
-  
   labs(colour="",linetype="",shape="")+
-  
+
+  #set x-axis
   coord_cartesian(xlim = setxaxis) + 
 
-theme_cowplot(12)
+theme_cowplot(12) #theme
 
 return(plot)
 }
@@ -230,6 +240,8 @@ return(plot)
 
 #Make 1 big plot
 ```{r}
+#Make a plot for every simulated scenario
+
 D11 <- makeROCplot(dat = 1, setxaxis = c(0.045,0.07), FPalwayspool = proportions$PAlwaysPool[1,4], FPneverpool = proportions$PNeverPool[1,4], TPalwayspool = proportions$PAlwaysPool[1,3], TPneverpool = proportions$PNeverPool[1,3])
 
 D12 <- makeROCplot(dat = 2, setxaxis = c(0.04,0.083), FPalwayspool = proportions$PAlwaysPool[2,4], FPneverpool = proportions$PNeverPool[2,4], TPalwayspool = proportions$PAlwaysPool[2,3], TPneverpool = proportions$PNeverPool[2,3])
@@ -247,31 +259,36 @@ D23 <- makeROCplot(dat = 7, setxaxis = c(0.04,0.25), FPalwayspool = proportions$
 
 D24 <- makeROCplot(dat = 8, setxaxis = c(0.04,0.4), FPalwayspool = proportions$PAlwaysPool[8,4], FPneverpool = proportions$PNeverPool[8,4], TPalwayspool = proportions$PAlwaysPool[8,3], TPneverpool = proportions$PNeverPool[8,3]) #4,2
 
+#arrange the plots in one big figure
 arrangedfigure <- ggpubr::ggarrange(D11, D21, D12, D22, D13, D23, D14, D24, 
-#         labels = c("D11", "D21", "D12", "D22", "D13", "D23", "D14", "D24"),
-         labels = c(" A ", " B ","C1", "D1", "C2", "D2", "C3", "D3"),
+          labels = c(" A ", " B ","C1", "D1", "C2", "D2", "C3", "D3"), #add labels
           ncol = 2, nrow = 4, common.legend = TRUE, vjust = +0.2, hjust = -1.6, align = "hv", legend = "bottom")
 
+# add text in the figure
 annotatedfigureRMST <- ggpubr::annotate_figure(arrangedfigure, 
                top = ggpubr::text_grob(expression(paste(lambda["c"],"= 776.89                                   ",lambda["c"],"= 876.89")), face = "bold", size = 20))
-```
-colnames(Npool) <- c('scalepar = 429', 'scalepar = 403')
-rownames(Npool) <- c('sdrandomcluster = 0', 'sdrandomcluster = 0.1', 'sdrandomcluster = 0.2','sdrandomcluster = 0.4')
 
-#########################
-##### SAMEN #############
-#########################
+#show the plot
+annotatedfigureRMST
+```
+
+#######################################
+## Combine the HR plot and RMST plot ##
+#######################################
 
 
 Save plot in 4.DataVisualization_output
 ```{r}
-arrangedfigurebeiden <- ggpubr::ggarrange(annotatedfigureHR, annotatedfigureRMST, 
+arrangedfigureBOTH <- ggpubr::ggarrange(annotatedfigureHR, annotatedfigureRMST, 
           ncol = 2, nrow = 1, common.legend = TRUE, align = "hv", legend = "right")
 
-annotatedfigurebeiden <- ggpubr::annotate_figure(arrangedfigurebeiden, 
+annotatedfigureBOTH <- ggpubr::annotate_figure(arrangedfigureBOTH, 
                top = ggpubr::text_grob("HR as final analysis                                                                                  RMST as final analysis", face = "bold", size = 20))
 
+#show the plot
+annotatedfigureBOTH
+
 #saveplot
-ggsave("4.DataVisualization_output/1.Sim1.png", plot = annotatedfigurebeiden, width = 20, height = 10)
+ggsave("4.DataVisualization_output/1.Sim1.png", plot = annotatedfigureBOTH, width = 20, height = 10)
 ```
 

@@ -1,0 +1,8 @@
+"0","Data11_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[1])"
+"0","Data12_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[2])"
+"0","Data13_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[3])"
+"0","Data14_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[4])"
+"0","Data21_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[1])"
+"0","Data22_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[2])"
+"0","Data23_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[3])"
+"0","Data24_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[4])"

@@ -1,0 +1,7 @@
+"0","```r
+#allocation control & exp
+pcont = 0.5
+N = 500
+Data <- as.data.frame(c(rep.int(0, pcont*N), rep.int(1, (1-pcont)*N)))
+colnames(Data)<-\"allocation\"
+```"

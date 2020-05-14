@@ -1,0 +1,20 @@
+"0","```r
+Nevents <- matrix(c(
+sumlist(list = Data11_list),
+sumlist(list = Data12_list),
+sumlist(list = Data13_list),
+sumlist(list = Data14_list),
+sumlist(list = Data21_list),
+sumlist(list = Data22_list),
+sumlist(list = Data23_list),
+sumlist(list = Data24_list)), ncol = 2, nrow = 4)
+colnames(Nevents) <- c('scalepar = 401', 'scalepar = 403')
+rownames(Nevents) <- c('sdrandomcluster = 0', 'sdrandomcluster = 0.1', 'sdrandomcluster = 0.2','sdrandomcluster = 0.4')
+Nevents
+```"
+"1","                      scalepar = 401 scalepar = 403
+sdrandomcluster = 0           282.96         282.43
+sdrandomcluster = 0.1         282.47         281.95
+sdrandomcluster = 0.2         282.23         281.73
+sdrandomcluster = 0.4         280.92         280.47
+"

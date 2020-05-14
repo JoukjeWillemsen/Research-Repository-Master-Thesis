@@ -1,0 +1,10 @@
+"0","```r
+```r
+library(boot)
+
+set.seed(100)
+bootobject<-boot(Dcontrol$STIME18, statistic = fc, R=4000)
+plot(bootobject)
+boot.ci(bootobject, conf=0.95) #get confidence interval
+```
+```"

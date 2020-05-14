@@ -1,0 +1,10 @@
+"0","```r
+Data11_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[1])
+Data12_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[2])
+Data13_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[3])
+Data14_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[4])
+Data21_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[1])
+Data22_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[2])
+Data23_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[3])
+Data24_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[4])
+```"

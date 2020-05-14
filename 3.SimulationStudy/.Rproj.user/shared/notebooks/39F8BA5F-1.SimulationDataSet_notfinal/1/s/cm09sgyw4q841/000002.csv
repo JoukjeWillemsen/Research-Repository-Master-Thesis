@@ -1,0 +1,20 @@
+"0","```r
+```r
+library(tidyr)
+library(tidyr)
+library(dplyr)
+
+a <- coxph(Surv(time=D$STIME18, event=D$STATUS18)~D$TRT)
+
+cox.zph(a)
+
+summary(a)  #output provides HR CIs
+confint(a)  #coefficient CIs
+exp(confint(a))  #Also HR CIs
+
+
+plot(survfit(Surv(time=D$STIME18, event=D$STATUS18)~D$TRT), main = \Plot of Survival Curves by treatment\, xlab = \Length of Survival\,ylab=\Proportion of Individuals who have Survived\,col=c(\blue\,\red\))
+legend(\topright\, legend=c(\Treatment\, \No treatment\),fill=c(\blue\,\red\),bty=\n\)
+
+```
+```"

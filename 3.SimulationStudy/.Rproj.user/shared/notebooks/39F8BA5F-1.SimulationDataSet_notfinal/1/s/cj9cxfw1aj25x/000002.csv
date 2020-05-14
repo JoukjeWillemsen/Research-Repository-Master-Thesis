@@ -1,0 +1,5 @@
+"0","```r
+# per groep:
+Survival_survfitgroup <- survfit(Surv(time=Data$survivalcensored, event=Data$StatusIndicator)~Data$allocation)
+plot(Survival_survfitgroup, main = \"Plot of Survival Curves by treatment\", xlab = \"Length of Survival\",ylab=\"Proportion of Individuals who have Survived\",col=c(\"blue\",\"red\"))
+```"

@@ -1,0 +1,6 @@
+"0","```r
+#Sort by order
+NoTreatOrdered <- Data$survivalcensored[order(Data$survivalcensored[Data$allocation==0],decreasing = F)]
+#Plot survival for controlgroup
+plot(NoTreatOrdered, type = \"h\")
+```"

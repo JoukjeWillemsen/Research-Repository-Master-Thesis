@@ -1,0 +1,8 @@
+"0","```r
+Tmax = 18*30 #trial followup time in days
+#censoring indicator
+Data$censoring <- ifelse(Data$TUM>Tmax, yes = 1, no = 0)
+Data$survivalcensored <- ifelse(Data$TUM>Tmax, yes = 10, no = Data$TUM)
+#Status indicator
+Data$StatusIndicator <- ifelse(Data$TUM>Tmax, yes=0, no = 1)
+```"

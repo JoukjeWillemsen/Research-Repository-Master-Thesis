@@ -1,0 +1,6 @@
+"0","```r
+#save(data, file = \"SimulatedDataSet.Rdata\")
+save.image(\"Results1.RData\")
+load(\"Results1.RData\")
+#save(list, file=\"fname.RData\")
+```"

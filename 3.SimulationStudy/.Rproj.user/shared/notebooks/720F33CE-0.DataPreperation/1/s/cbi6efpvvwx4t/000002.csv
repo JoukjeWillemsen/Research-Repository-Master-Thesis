@@ -1,0 +1,24 @@
+"0","load(""~/MasterThesis/R/DATA2018.Rdata"")"
+"2","Warning messages:
+"
+"2","1: "
+"2","In doTryCatch(return(expr), name, parentenv, handler) :"
+"2","
+ "
+"2"," display list redraw incomplete
+"
+"2","2: "
+"2","In doTryCatch(return(expr), name, parentenv, handler) :"
+"2","
+ "
+"2"," invalid graphics state
+"
+"2","3: "
+"2","In doTryCatch(return(expr), name, parentenv, handler) :"
+"2","
+ "
+"2"," invalid graphics state
+"
+"0","#Make subset with only controls"
+"0","Dcontrol <- D[which(D$TRT==""N""),]"
+"0","Dcontrol <- Dcontrol[complete.cases(Dcontrol[,11]),]"

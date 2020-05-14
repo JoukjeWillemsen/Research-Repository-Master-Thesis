@@ -1,0 +1,5 @@
+"0","shapeparameter = 2.56"
+"0","scaleparameter = c(401,403) #navragen"
+"0","treatmenteffect = 3 #navragen"
+"0","sdrandomeffectpatient = 0 #2.18 navragen"
+"0","sdrandomeffectcluster = c(0, 0.1, 0.2, 0.4) #navragen"

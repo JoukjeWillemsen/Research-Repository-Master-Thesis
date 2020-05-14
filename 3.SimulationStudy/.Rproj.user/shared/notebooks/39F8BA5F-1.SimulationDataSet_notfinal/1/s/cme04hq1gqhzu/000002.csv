@@ -1,0 +1,21 @@
+"0","```r
+survdiff(Surv(time=Data$survivalcensored, event=Data$StatusIndicator)~Data$allocation)
+```"
+"1","Call:
+survdiff(formula = Surv(time = Data$survivalcensored, event = Data$StatusIndicator) ~ 
+    Data$allocation)
+
+                    N Observed Expected (O-E)^2/E (O-E)^2/V
+Data$allocation=0 250      250      376        42       190
+Data$allocation=1 250      250      124       127       190
+
+ Chisq= 190  on 1 degrees of freedom, p= <2e-16 
+"
+"0","```r
+Coxtest <- coxph(Surv(time=Data$survivalcensored, event=Data$StatusIndicator)~Data$allocation)
+cox.zph(Coxtest) #tests the 
+```"
+"1","                chisq df       p
+Data$allocation  20.7  1 5.3e-06
+GLOBAL           20.7  1 5.3e-06
+"

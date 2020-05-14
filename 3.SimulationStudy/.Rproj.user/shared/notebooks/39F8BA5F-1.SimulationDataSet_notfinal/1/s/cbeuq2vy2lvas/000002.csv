@@ -1,0 +1,12 @@
+"0","```r
+library(dplyr)
+library(survival)
+library(EnvStats)
+shapeparameter = 2
+scaleparameter = 5 #nazoeken!
+treatmenteffect = 3 #nazoeken!
+Data$TUM <- Data %>% #time until mortality
+               nrow() %>% 
+               rweibull(shapeparameter,scaleparameter*exp(-(Data$allocation*treatmenteffect+
+                 Data$randomeffectpatient+Data$randomeffectcluster)/shapeparameter))
+```"

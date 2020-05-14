@@ -1,0 +1,7 @@
+"0","eqHRmatrix <- function (list){"
+"0","df <- matrix(ncol = 2, nrow = 1000) %>% data.frame()"
+"0","for(i in 1:1000){"
+"0","df[i,] <- eqHR(list[[i]])"
+"0","}"
+"0","return(df)"
+"0","}"

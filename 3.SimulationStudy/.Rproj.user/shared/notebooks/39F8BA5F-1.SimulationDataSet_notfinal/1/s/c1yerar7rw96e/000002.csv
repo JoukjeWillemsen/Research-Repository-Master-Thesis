@@ -1,0 +1,24 @@
+"0","```r
+#Load data:
+load(\"~/MasterThesis/R/DATA2018.Rdata\")
+
+#Make subset with only controls
+Dcontrol <- D[which(D$TRT==\"N\"),]
+
+library(EnvStats)
+eweibull(Dcontrol$STIME18)
+#shape =   2.559648
+y = 2.559648
+#scale = 401.425498
+l=401.425498
+
+#variance
+var(Dcontrol$STIME18, na.rm = TRUE)
+#22599.86
+
+sqrt(22599.86) #150.3325
+
+log(150.33) #waarom ook alweer huh??
+
+##### VRAAG AAN RUBEN: STIME OF STIME18??!!!?!
+```"
