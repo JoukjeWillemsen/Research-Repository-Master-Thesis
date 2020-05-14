@@ -39,8 +39,8 @@ For a detailled description of the simulationprocedure to replicate the obtained
 
 **Data protection impact assessment**
 
-The PRO-ACT database is already publicly available with the goal of facilitating research that might benefit future ALS patients. The research question of this manuscript is in line with this goal; if a more appropriate method of including historical controls can be established, future (ALS) trials can benefit from this knowledge and in some cases underpowered and/or biased studies can be prevented. The PRO-ACT database provides real-world historical controls, and therefore provided the simulation study with a more realistic working example. 
-The use of the PRO-ACT dataset in this study is conform the [terms and conditions of the PRO-ACT database](https://nctu.partners.org/ProACT/Document/DisplayLatest/1) and not shared with others or stored elsewhere. Hence no additional burden, risks or privacyproblems is caused by this study for any of the participants who originally took part of the trials inlcuded in the PRO-ACT database.
+The PRO-ACT database is already publicly available with the goal of facilitating research that might benefit future ALS patients. The research question of this manuscript is in line with this goal; if a more appropriate method of including historical controls can be established, future (ALS) trials can benefit from this knowledge and in some cases underpowered and/or biased studies can be prevented. The PRO-ACT database provides real-world historical controls, and therefore provides the simulation study with a more realistic working example. 
+The use of the PRO-ACT dataset in this study is conform the [terms and conditions of the PRO-ACT database](https://nctu.partners.org/ProACT/Document/DisplayLatest/1) and not shared with others nor stored elsewhere. Hence no additional burden, risks or privacyproblems are caused by this study for any of the participants who originally took part in the trials inlcuded in the PRO-ACT database.
 
 **Informed consent & anonymization/pseudonymization**
 
@@ -48,7 +48,7 @@ On the [PRO-ACT website](https://nctu.partners.org/ProACT/Document/DisplayLatest
 
 **Security**
 
-The PRO-ACT database is publicly available. However, statement four of the terms and conditions of using the PRO-ACT dataset states that the PRO-ACT Database should not be shared with anyone who has not signed the agreement and acknowledged the terms and conditions. Hence only summarystatistics are stored in this research archive and no raw data that contain parts of the PRO-ACT dataset in any way are shared online. 
+The PRO-ACT database is publicly available. However, statement four of the terms and conditions of using the PRO-ACT dataset states that the PRO-ACT database should not be shared with anyone who has not signed the agreement and acknowledged the terms and conditions. Hence only summary statistics are stored in this research archive; no raw data that contain parts of the PRO-ACT dataset in any form are shared online. 
 
 For more information about the collection of the data, informed consent and how privacy is guaranteed I would like to refer to the [PRO-ACT website](https://nctu.partners.org/ProACT/Document/DisplayLatest/9) and [the article of Atassi et al. (2014)](https://www.ncbi.nlm.nih.gov/pubmed/25298304)
 
