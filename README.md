@@ -33,16 +33,16 @@ For a detailled description of the simulationprocedure to replicate the obtained
 **Privacy**
 ---
 
-**data protection impact assessment**
+**Data protection impact assessment**
 
 The PRO-ACT database is already publicly available with the goal of facilitating research that might benefit future ALS patients. The research question of this manuscript is in line with this goal; if a more appropriate method of including historical controls can be established, future (ALS) trials can benefit from this knowledge and in some cases underpowered and/or biased studies can be prevented. The PRO-ACT database provides real-world historical controls, and therefore provided the simulation study with a more realistic working example. 
 The use of the PRO-ACT dataset in this study is conform the [terms and conditions of the PRO-ACT database](https://nctu.partners.org/ProACT/Document/DisplayLatest/1) and not shared with others or stored elsewhere. Hence no additional burden, risks or privacyproblems is caused by this study for any of the participants who originally took part of the trials inlcuded in the PRO-ACT database.
 
-**informed consent & anonymization/pseudonymization**
+**Informed consent & anonymization/pseudonymization**
 
-On the website of PRO-ACT, there's the following ethical statement: *"In all of the trials that generated the data included in this database, study protocols were approved by the participating medicalcenters and all participating patients gave informed consent. De-identified data from these trials were donated to the PRO-ACT database for research purposes only and under the explicit conditions that Prize4Life and all users of the data would maintain the anonymity of subjects and not attempt to discover the identity of any subject. In the rare cases where donated data was not already completely anonymized, donated data was further anonymized following the HIPAA de-identification conventions for personal health information: any potential patient initials and/or dates of birth were removed, new randomized subject numbers were created, and wherever possible, trial-specific information was removed in the merging of datasets, including trial center identity and location, trial dates, or other identifying information."
+On the website of PRO-ACT, there's the following ethical statement: *"In all of the trials that generated the data included in this database, study protocols were approved by the participating medicalcenters and all participating patients gave informed consent. De-identified data from these trials were donated to the PRO-ACT database for research purposes only and under the explicit conditions that Prize4Life and all users of the data would maintain the anonymity of subjects and not attempt to discover the identity of any subject. In the rare cases where donated data was not already completely anonymized, donated data was further anonymized following the HIPAA de-identification conventions for personal health information: any potential patient initials and/or dates of birth were removed, new randomized subject numbers were created, and wherever possible, trial-specific information was removed in the merging of datasets, including trial center identity and location, trial dates, or other identifying information."*
 
-**security**
+**Security**
 
 The PRO-ACT database is publicly available. However, statement four of the terms and conditions of using the PRO-ACT dataset states that the PRO-ACT Database should not be shared with anyone who has not signed the agreement and acknowledged the terms and conditions. Hence only summarystatistics are stored in this research archive and no raw data that contain parts of the PRO-ACT dataset in any way are shared online. 
 
