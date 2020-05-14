@@ -1,8 +1,21 @@
 Instructions datareplication 
 ===
-This README contains a detailled description of the simulationprocedure to replicate the obtained results. Please note that this simulation study has (last) been executed from 28-04-20 until 30-04-20.
+This README contains a detailled description of the simulationprocedure to replicate the obtained results. 
 
-*	In case of a simulation study, the computer code that has been applied to simulate the data, including version number of the software, operation system of the machine, and the seed number of the random generator. 
+Please note that this simulation study has (last) been executed from 28-04-20 until 30-04-20. The seed numbers of the random generator are stated in the R-code.
+
+The package versions of the R-packages applied in this simulationstudy are stated below. The operation system of the computer is Windows 10 Home, 64-bit. The simulation study is performed in R, version 3.6.2 (Rstudio version 1.1.456). The approximated runningtime for both the simulationstudies (all the rmd. files in this folder) is 28 hours, which is largely due to the long runningtime of 'A.2.4.Equivalence-testing HR boot', 'B.2.4.Equivalence-testing HR boot', 'A.2.5.Equivalence-testing rMean boot' and 'B.2.5.Equivalence-testing rMean boot'.
+
+
+| R-package                  | Package version |
+| -----------------          | ------------- |
+| 'Survival'                 |3.1.8 |
+| 'Boot'             |1.3.23 |
+| 'GGplot2'                   |3.2.1 |
+| 'Coxplot'                   |1.0.0|
+| 'dplyr'                     |0.8.4|
+| 'ggpubr'                    |0.2.4|
+| 'survminer'                 |0.4.6|
 
 ---
 **Obtaining the PRO-ACT database & datapreperation**
@@ -25,7 +38,8 @@ P
 
 Hence, there are two versions of every rmd file (except '0.DataPreperation'), either starting with "A." or "B.". 
 
-For both the simulation studies, run the rmd files stored in this folder starting from 'O.DataPreperation' to 'A/B.DataVisualization' in the right order as presented below: 
+For both the simulation studies, run the rmd files stored in this folder starting from 'O.DataPreperation' to 'A/B.DataVisualization' in the right order as presented below.  
+ 
 
 | Files                      | Description   |
 | -----------------          | ------------- |
@@ -54,8 +68,10 @@ At the end of every rmd file the raw data output is stored in the folder with th
 |functions                   |contains R files with functions that are used multiple times in the rmd files described above|
 |vanEijk_functions           |contains R files with functions that are both not part of a package and not written by me, with a README file with a refference|
 
+--
 The resulting graphs and proportions can be find in the folder '4.DataVisualization_ouput'.
 
+Joukje Willemsen, 14-05-2020
 
 
 
