@@ -1,0 +1,106 @@
+---
+title: "2.4 HR equivalence boot"
+author: "Joukje Willemsen"
+date: "13-05-2020"
+output: html_document
+---
+
+In this document the confidence intervals of the HR test are bootstrapped for the scenarios referred to as A, B, C1-3 and D1-3 in the article.
+
+Please note that:
+
+Data11 = Scenario A
+
+Data12 = Scenario C1
+
+Data13 = Scenario C2
+
+Data14 = Scenario C3
+
+Data21 = Scenario B
+
+Data22 = Scenario D1
+
+Data23 = Scenario D2
+
+Data24 = Scenario D3
+
+#Load simulated & historical data
+```{r}
+load("1.DataSimulation_output/1.Hcontrol.Rdata")
+load("0.DataPreperation_output/0.Historicaldata.RData")
+```
+
+#Load packages
+```{r}
+library(survival)
+library(dplyr)
+```
+
+#Function to extract hazard ratios
+```{r}
+HR <- function (D, d) #input: Hcontrol[[1]][[1]]
+{
+df <-D[d,] #Indexing, needed for bootstrapping
+
+fit <- coxph(Surv(time=survivaltime, event=event)~indicator, data = data.frame(
+survivaltime=c(Dcontrol$STIME18, df$survivalcensored),
+event = c(Dcontrol$STATUS18, df$StatusIndicator),
+indicator=c(rep(1, 2889),rep(0, length(df$survivalcensored)))))
+return(exp(fit$coefficients)) # return estimated HR
+}
+```
+
+#Make function to bootstrap
+```{r}
+BootHR_CI <- function (df)
+{
+suppressWarnings({
+#Bootstrap sample
+bootobject<-boot::boot(data=df, statistic = HR, R=400)
+#Get the bootstrapped CI
+output <- boot.ci(bootobject, conf=0.95)
+})
+return(output$normal[2:3]) #Choose the "normal bootstrap"
+}
+```
+
+Test function
+```{r}
+library(boot)
+set.seed(100)
+
+test <-BootHR_CI(Hcontrol[[1]][[1000]])
+test
+```
+The confidence interval of the hazard rate ranges between 0.56 and 1.41. 
+
+#Function that returns a matrix with all the CI's
+```{r}
+BootHRmatrix <- function (list){
+df <- matrix(ncol = 2, nrow = 1000) %>% data.frame() #make a matrix to store the CIs
+for(i in 1:1000){ #for every simulated dataset
+df[i,] <- BootHR_CI(list[[i]]) #use function BootHR_CI
+}
+return(df) #return the matrix with CIs
+}
+```
+
+#Make a list with all the results (warning: takes a loooooong time!)
+```{r}
+library(boot)
+
+set.seed(100) 
+
+#Apply function BootHRmatrix to every simulated scenario
+BootCIsHR<-lapply(Hcontrol, FUN = BootHRmatrix) 
+
+names(BootCIsHR) <- c("Data11","Data12","Data13","Data14","Data21","Data22","Data23","Data24")
+```
+
+Save the bootstrapped CIs
+```{r}
+save(BootCIsHR, file = "2.PoolingMethods_output/2.4.BootCIsHR.Rdata")
+```
+
+

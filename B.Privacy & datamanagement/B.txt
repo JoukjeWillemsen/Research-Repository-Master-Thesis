@@ -1,0 +1,4 @@
+1.	A data protection impact assessment is an assessment of privacy issues and resulting measures to fix possible privacy problems.
+2.	Prepare data files such that any raw data stored are always anonymized and cannot therefore be traced directly to the individual concerned. Data that can be traced to the individual concerned are stored separately. If a key is needed to link the anonymized data to the individuals concerned, the key has to be stored separately.
+3.	Informed consent forms are stored in a separate file database.
+4.	Research archive is stored to the secured O-drive of the University of Utrecht faculty server. External storage of raw data in national or international data archives, such as Data Archiving and Networked Services (DANS) is allowed and sometimes compulsory, but this does not relieve the researcher of responsibility for data stored on the faculty server

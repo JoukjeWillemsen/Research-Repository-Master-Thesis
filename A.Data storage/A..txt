@@ -1,0 +1,18 @@
+Data storage
+For each published empirical study (article, chapter in a book, chapter in a thesis, Research Master's thesis, retrievable internal report, etc.) the following information has to be stored in the archive:
+1.	data management plan that provides a description of how the data management is organized, about responsibilities, about the contents of the research archive, including version number and date (optional for Research Seminar students). 
+2.	very brief description of the hypothesis, research design, conceptual framework, method followed and structure of the data collected. As a rule, an electronic version of the accepted or published manuscript is sufficient for this; 
+3.	instructions, procedures, the design of the experiment and any stimulus materials reasonably required for replication. The materials must be available in the language in which the research was conducted. An English translation is optional (but appreciated); 
+4.	raw data files (the most direct record of the behaviour or responses of test subjects/respondents, e.g.: an unfiltered export of an online survey or raw time series for an EEG measurement, e-data files for an E-Prime behavioural experiment). In case of a simulation study, it depends on the size of the data files whether they are stored in the archive or whether only the procedure to generate the data is provided; 
+5.	computer code (e.g. SPSS syntax file, MATLAB analysis scripts) that describes the steps to obtain the final analysis data from the raw data. This should include brief explanations of the steps in English; 
+6.	data files that have been subjected to a final analysis for the purpose of writing the article (e.g. SPSS data file after transformation of variables, changes to selections, etc.). The latter is not necessary if the raw data file has been analyzed;
+7.	In case of a simulation study, the computer code that has been applied to simulate the data, including version number of the software, operation system of the machine, and the seed number of the random generator. This should include brief explanations of the steps in English;  
+8.	computer code (e.g. SPSS syntax file) describing the steps followed to arrive at the results in the manuscript, based on the analysis data. This should include brief explanations of the steps in English;
+9.	In case a data management plan is missing, a Readme file is needed that describes where the documents and/or files can be found and how they should be interpreted. The Readme file should also contain the following information: 
+a.	the name of the person who saved the documents and/or files; 
+b.	the date on which the manuscript was accepted, including a reference; 
+c.	the date on/period in which the data was collected or simulated; 
+d.	(if applicable) for each study, the names of the people who collected the data; 
+e.	(if applicable) the addresses of any offsite locations where the data was collected and the relevant contact persons. 
+The Readme file must be sufficiently clear to enable the results in the publication to be reproduced on the basis of the components of the research archive package.
+

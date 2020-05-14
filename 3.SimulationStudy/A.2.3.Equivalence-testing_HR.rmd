@@ -1,0 +1,88 @@
+---
+title: "2.3 Obtaining CIs for the HR equivalence test"
+author: "Joukje Willemsen"
+date: "13-05-2020"
+output: html_document
+---
+
+In this document the confidence intervals of the HR test are calculated for the scenarios referred to as A, B, C1-3 and D1-3 in the article.
+
+Please note that:
+
+Data11 = Scenario A
+
+Data12 = Scenario C1
+
+Data13 = Scenario C2
+
+Data14 = Scenario C3
+
+Data21 = Scenario B
+
+Data22 = Scenario D1
+
+Data23 = Scenario D2
+
+Data24 = Scenario D3
+
+#Load simulated & historical data
+```{r}
+load("1.DataSimulation_output/1.Hcontrol.Rdata")
+load("0.DataPreperation_output/0.Historicaldata.RData")
+```
+
+#Load packages
+```{r}
+library(survival)
+library(dplyr)
+```
+
+#Function that gives the CI of the HR
+```{r}
+eqHR <- function (df)
+{
+# Create dataset as input, where both the historical controls and the input dataset is included
+fit <- coxph(Surv(time=survivaltime, event=event)~indicator, data = data.frame(
+survivaltime=c(Dcontrol$STIME18, df$survivalcensored),
+event = c(Dcontrol$STATUS18, df$StatusIndicator),
+indicator=c(rep(1, length(Dcontrol$STIME18)),rep(0, length(df$survivalcensored)))))
+
+# return the confidence interval
+return(exp(confint(fit)) )
+}
+```
+
+Test eqHR function
+```{r}
+eqHR(Hcontrol[[1]][[1]])
+```
+The confidence interval of the hazard rate ranges between 0.70 and 1.48
+
+
+#Function that returns a matrix with all the CI's using function eqHR
+```{r}
+eqHRmatrix <- function (list){
+#Make a matrix to store the CIs
+df <- matrix(ncol = 2, nrow = 1000) %>% data.frame()
+colnames(df) <- c("LowerCI", "UpperCI")
+for(i in 1:1000){
+#Store CIs for every simulated dataset
+df[i,] <- eqHR(list[[i]])
+}
+return(df)
+}
+```
+
+#Store the results
+```{r}
+#Apply the function to every simulated scenario
+CIsHR <-lapply(Hcontrol, FUN = eqHRmatrix)
+
+#Add names to the simulated scenarios
+names(CIsHR) <- c("Data11","Data12","Data13","Data14","Data21","Data22","Data23","Data24")
+
+#Save the matrices
+save(CIsHR, file = "2.PoolingMethods_output/2.3.CIsHR.Rdata")
+```
+
+

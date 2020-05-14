@@ -1,0 +1,84 @@
+---
+title: "2.2.PoolingTestThenPool"
+author: "Joukje Willemsen"
+date: "20 februari 2020"
+output: html_document
+---
+
+In  this document the decision to pool or not is determined by a regular TTP test for the scenarios referred to as A, B, E1-3 and F1-3 in the article.
+
+Please note that:
+
+Data11 = Scenario A
+
+Data12 = Scenario E1
+
+Data13 = Scenario E2
+
+Data14 = Scenario E3
+
+Data21 = Scenario B
+
+Data22 = Scenario F1
+
+Data23 = Scenario F2
+
+Data24 = Scenario F3
+
+#Load simulated & historical data
+```{r}
+load("1.DataSimulation_output/1.HcontrolShape.Rdata")
+load("0.DataPreperation_output/0.Historicaldata.RData")
+```
+
+#Load packages
+```{r}
+library(survival)
+library(dplyr)
+```
+
+#Obtain p-value from the HR difference test
+```{r}
+getpvalue <- function (df)
+{
+# Create dataset as input, where both the historical controls and the input dataset is included
+dataset <- list(start=c(Dcontrol$STIME18, df$survivalcensored),
+                stop =c(Dcontrol$STATUS18, df$StatusIndicator),
+                event = c(rep(1, length(Dcontrol$STATUS18)), rep(0, length(df$StatusIndicator))))
+#perform the HR difference test
+result <- summary(coxph( Surv(start, stop) ~ event, dataset))
+#the p-value obtained from the logtest is extracted
+return(result$logtest[3])
+}
+```
+
+test function
+```{r}
+getpvalue(Hcontrol[[1]][[1]])
+```
+
+#Function that returns vector with all the p-values of all the simulate datasets
+```{r}
+pvaluematrix <- function (list){
+#Make a matrix to store the p-values
+df <- matrix(ncol = 1, nrow = 1000) %>% data.frame()
+for(i in 1:1000){
+#Store p-values
+df[i,] <- getpvalue(list[[i]]) #for every simulated dataset, obtain the pvalue and store in df
+}
+return(df)
+}
+```
+
+#Make a list with all the results
+```{r}
+#Apply the function to every simulated scenario
+pvaluematrices<-lapply(Hcontrol, FUN = pvaluematrix)
+
+#Add names to the simulated scenarios
+names(pvaluematrices) <- c("Data11","Data12","Data13","Data14","Data21","Data22","Data23","Data24")
+
+#Save the matrices
+save(pvaluematrices, file = "2.PoolingMethods_output/2.2.PvaluesTTPShape.Rdata")
+```
+

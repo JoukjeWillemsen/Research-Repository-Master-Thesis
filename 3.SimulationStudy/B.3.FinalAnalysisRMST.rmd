@@ -1,0 +1,582 @@
+---
+title: "3.FinalAnalysis RMST scenario A,B,E1-3 and F1-3"
+author: "Joukje Willemsen"
+date: "14-05-20"
+output: html_document
+---
+
+In this document different decisionthresholds are applied for every poolingmethod, a RMST test is performed as final analysis to obtain the false positive rate (FPR) and true positive rate (TPR) for every poolingmethod and every decisionthreshold in every simulated scenario, referred to as A, B, E1-3 and F1-3 in the article.
+
+Please note that:
+
+Data11 = Scenario A
+
+Data12 = Scenario E1
+
+Data13 = Scenario E2
+
+Data14 = Scenario E3
+
+Data21 = Scenario B
+
+Data22 = Scenario F1
+
+Data23 = Scenario F2
+
+Data24 = Scenario F3
+
+#Load packages
+```{r}
+library(survival)
+library(dplyr)
+```
+
+Recall that every simulated dataset is subjected to every pooling method. The outcome of the pooling method can be either "pool" or "not pool". 
+
+First I want to create datasets with the outcome (a true positive or a false negative) for every simulated dataset 
+
+#Load the datasets where nothing is pooled and everything is pooled
+```{r}
+#Never pool
+load("1.DataSimulation_output/1.HcontrolShape.Rdata")
+NeverPool <- Hcontrol
+
+#Always pool
+load("2.PoolingMethods_output/2.1.AlwaysPoolDatasetShape.Rdata")
+AlwaysPool <- AlwaysPoolData
+```
+
+#Store them in a list
+```{r}
+Controlgroup <- list(NeverPool = NeverPool,
+                     AlwaysPool = AlwaysPool)
+```
+
+#Load experimental data
+```{r}
+load("1.DataSimulation_output/1.HexpTPShape.Rdata")
+load("1.DataSimulation_output/1.HexpFPShape.Rdata")
+load("1.DataSimulation_output/1.HcontrolShape.Rdata")
+```
+
+#Function that gives p value control vs exp
+```{r}
+
+get_decision_rmean <- function(dataC, dataE, alpha = 0.05){
+  
+  #Make a survfit object for both the experimental and control data
+  survfitC <- survfit(Surv(time = survivalcensored, event = StatusIndicator, type = "right") ~ 1, data = dataC)
+  
+  survfitE <- survfit(Surv(time = survivalcensored, event = StatusIndicator, type = "right") ~ 1, data = dataE)
+  
+  #Abstract the estimated mean and SE form the survfit object
+  
+  rmeanC <- survival:::survmean(survfitC, rmean=548) [[1]]["*rmean"]
+  seC <- survival:::survmean(survfitC, rmean=548) [[1]]["*se(rmean)"]
+  
+  rmeanE <- survival:::survmean(survfitE, rmean=548) [[1]]["*rmean"]
+  seE <- survival:::survmean(survfitE, rmean=548) [[1]]["*se(rmean)"]
+  
+  #Calculate estimated difference
+  delta <- rmeanE - rmeanC
+  
+  #Calculate the estimated sampling variance combined
+  SE <- sqrt(seE^2 + seC^2)
+  
+  #To test the null hypothesis (true) delta = 0 is made by comparing deta_est/SE_est with a standard normal distribution
+  
+  statistic <- delta/SE
+  
+  pvalue <- dnorm(statistic)
+  
+  return(pvalue)
+}
+```
+
+Make a function that gives Pvalues in a matrix
+```{r}
+#Pvalues[Alwayspool/Neverpool][situatie1t/m8][1tm1000][2colommen:FP&TP]
+PvaluesMatrices <- function(HexpTP, HexpFP, cont){
+  
+  pvaluesmatrix <- matrix(NA, nrow = 1000, ncol = 2) 
+  colnames(pvaluesmatrix) <- c("TP", "FP")
+
+  for (i in 1:1000){#replication
+    pvaluesmatrix[i,1] <- get_decision_rmean(dataC = cont[[i]], dataE = HexpTP[[i]])
+    pvaluesmatrix[i,2] <- get_decision_rmean(dataC = cont[[i]], dataE = HexpFP[[i]])
+    }
+  result <- pvaluesmatrix
+  return(result)
+}
+```
+
+#Apply to every dataset, make two big lists: alwayspool(expTP & expFP) & neverpool(expTP & expFP) - takes some time!
+```{r}
+#or uncommend the next line:
+#load("3.FinalAnalysis_output/3.PvaluesAlwaysNeverPoolrmean.Rdata")
+
+PAlwaysPool <- list() #make a list
+
+#For every simulated scenario (8 in total), execute the PvalueMatrices function in a situation where not one controlgroup is pooled and a situation where every controlgroup is pooled
+
+for (i in 1:8){ 
+  PAlwaysPool[[i]] <- PvaluesMatrices(HexpTP = HexpTP[[i]], HexpFP = HexpFP[[i]], cont = AlwaysPool[[i]])
+}
+names(PAlwaysPool) <- c("Data11","Data12","Data13","Data14","Data21","Data22","Data23","Data24")
+
+PNeverPool <- list() #make a list
+
+for (i in 1:8){
+  PNeverPool[[i]] <- PvaluesMatrices(HexpTP = HexpTP[[i]], HexpFP = HexpFP[[i]], cont = NeverPool[[i]])
+}
+names(PNeverPool) <- c("Data11","Data12","Data13","Data14","Data21","Data22","Data23","Data24")
+
+Pvalues <- list(PAlwaysPool=PAlwaysPool, PNeverPool=PNeverPool)
+
+save(Pvalues, file = "3.FinalAnalysis_output/3.PvaluesAlwaysNeverPoolrmeanShape.Rdata")
+```
+
+
+#Specify decsion for every dataset in both alwayspool & neverpool
+```{r}
+Decisions <- Pvalues #replicate the list of lists...
+pcrit<- 0.05
+
+for (a in 1:2){ #Alwayspool & Neverpool
+  for (b in 1:8){ #situation
+    for (c in 1:1000){ #replication
+
+Decisions[[a]][[b]][[c,1]] <-
+ if_else(Pvalues[[a]][[b]][c,1] <= pcrit, true = 1, false = 0, missing = NULL)      
+Decisions[[a]][[b]][[c,2]] <-
+ if_else(Pvalues[[a]][[b]][c,2] <= pcrit, true = 1, false = 0, missing = NULL)      
+    }}}
+
+#1 means significant effect
+#0 means not significant effect
+
+save(Decisions, file = "3.FinalAnalysis_output/3.DecisionsAlwaysNeverPoolrmeanShape.Rdata")
+```
+
+
+
+Now we have for every simulated dataset what the decision would be when the dataset is pooled and what the decision would be when the dataset is not pooled for a situation where there's an effect (HR = 0.5) and a situation where there's no effect (HR = 1). 
+
+Instead of pooling datasets together and calculating the p-values, we can now extract de final p-values/decisions if we know the decision (pool or not pool) of every method
+
+###Different poolingmethods
+
+```{r}
+#Make function that indicates whether the outcome would be "pool" or "not pool" given a specified threshold, pcrit
+
+testthenpool_decision <- function (pvalue, pcrit = 0.05){ #change eqregion
+  if (pvalue >= pcrit){decision <- "pool"}
+  else if (pvalue < pcrit){decision <- "notpool"}
+  return(decision)
+}
+```
+
+```{r}
+#Prepare for storing data
+PoolDecisions <- list() #Make a list to store the decision "pool" or "not pool"
+PoolDecisions$TTP <- list() #Within this list make a list for the pooling method TTP
+Decisions$PTTP <- list() 
+```
+
+#TTP - varier beslissingsdrempel & store results
+```{r}
+load("2.PoolingMethods_output/2.2.PvaluesTTPShape.Rdata")
+
+#Make a vector with all the critical thresholds that will be evaluated
+pcritvector <- c(0, 0.0001, 0.001, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 0.99, 0.999, 0.9999, 1)
+
+#Make a list for every threshold
+for (a in 1:length(pcritvector)){
+  PoolDecisions$TTP[[a]] <- list() #make list for every different threshold
+  Decisions$PTTP[[a]]<-list() #make list for every different threshold
+  
+#make a decision about whether to pool or not based on the threshold and store the decision
+for (b in 1:8){
+PoolDecisions$TTP[[a]][[b]] <- apply(pvaluematrices[[b]], MARGIN = 1, FUN = testthenpool_decision, pcrit = pcritvector[a]) 
+  
+Decisions$PTTP[[a]][[b]]<- matrix(NA, nrow = 1000, ncol = 2) #make a matrix to store the 
+
+#Add colnames
+colnames(Decisions$PTTP[[a]][[b]]) <- c("TP", "FP")
+  
+#Given whether the datasets are pooled or not, return the decision for the final analysis (significant or not)
+for (c in 1:1000) {
+
+#if the decision is pool, extract the decision based on the significance from "alwayspool", otherwise extract from "neverpool". Do this for both the situation where there's an effect (column 1) and where there's no effect (column 2)
+  Decisions$PTTP[[a]][[b]][c,1] <- if_else(PoolDecisions$TTP[[a]][[b]][c]== "pool", true = Decisions$PAlwaysPool[[b]][c,1], false = Decisions$PNeverPool[[b]][c,1])
+  
+  Decisions$PTTP[[a]][[b]][c,2] <- if_else(PoolDecisions$TTP[[a]][[b]][c]== "pool", true = Decisions$PAlwaysPool[[b]][c,2], false = Decisions$PNeverPool[[b]][c,2])
+}
+}
+}
+
+sum(Decisions$PAlwaysPool[[7]][,1])
+sum(PoolDecisions$TTP[[1]][[8]]=="pool")
+sum(PoolDecisions$TTP[[length(pcritvector)]][[8]]=="pool")
+```
+
+#CIs - varier beslissingsdrempel & store results
+CIs HR
+```{r}
+#Load the CIs
+load("2.PoolingMethods_output/2.3.CIsHRShape.Rdata")
+
+#Load function
+topoolornot <- dget("functions/topoolornot.R")
+
+#PoolDecisions <- list()
+PoolDecisions$CIsHR <- list()
+Decisions$PHR <- list()
+eqregionmatrix = matrix(c(c(0.00001, 1/(0.00001)),
+                          c(0.001, 1/(0.001)),
+                          c(0.01, 1/(0.01)),
+                          c(0.1, 1/(0.1)),
+                          c(0.2, 1/(0.2)),
+                          c(0.25, 1/(0.25)),
+                          c(0.3, 1/(0.3)),
+                          c(0.35, 1/(0.35)),
+                          c(0.4, 1/(0.4)),
+                          c(0.45, 1/(0.45)),
+                          c(0.475, 1/(0.475)),
+                          c(0.5, 1/(0.5)),
+                          c(0.525, 1/(0.525)),
+                          c(0.55, 1/(0.55)),
+                          c(0.575, 1/(0.575)),
+                          c(0.6, 1/(0.6)),
+                          c(0.625, 1/(0.625)),
+                          c(0.65, 1/(0.65)),
+                          c(0.66, 1/(0.66)),
+                          c(0.67, 1/(0.67)),
+                          c(0.675, 1/(0.675)),
+                          c(0.68, 1/(0.68)),
+                          c(0.69, 1/(0.69)),
+                          c(0.7, 1/(0.7)),
+                          c(0.8, 1/(0.8)),
+                          c(0.9, 1/(0.9)),
+                          c(0.999, 1/(0.999))),
+                        nrow=27,              # number of rows 
+                        ncol=2,              # number of columns 
+                        byrow = TRUE)        # fill matrix by rows 
+
+
+#different thresholds
+for (a in 1:nrow(eqregionmatrix)){
+  PoolDecisions$CIsHR[[a]] <- list() #make list for every different threshold
+  Decisions$PHR[[a]]<-list() #make list for every different threshold
+
+#different situations
+for (b in 1:8){
+  PoolDecisions$CIsHR[[a]][[b]] <- apply(CIsHR[[b]], MARGIN = 1, FUN = topoolornot, eqregion = eqregionmatrix [a,]) #make a decision based on the threshold and store the decision
+  
+  Decisions$PHR[[a]][[b]]<- matrix(NA, nrow = 1000, ncol = 2) #make a matrix to store the TP & FP
+  colnames(Decisions$PHR[[a]][[b]]) <- c("TP", "FP")
+ 
+#different simulated datasets
+for (c in 1:1000) {
+
+#if the decision is pool, extract the decision based on the significance from "alwayspool", otherwise extract from "neverpool". Do this for both the situation where there's an effect (column 1) and where there's no effect (column 2)
+  Decisions$PHR[[a]][[b]][c,1] <- if_else(PoolDecisions$CIsHR[[a]][[b]][c]== "pool", true = Decisions$PAlwaysPool[[b]][c,1], false = Decisions$PNeverPool[[b]][c,1])
+  
+  Decisions$PHR[[a]][[b]][c,2] <- if_else(PoolDecisions$CIsHR[[a]][[b]][c]== "pool", true = Decisions$PAlwaysPool[[b]][c,2], false = Decisions$PNeverPool[[b]][c,2])
+}
+}
+}
+```
+
+
+CIs HR Boot
+```{r}
+#Load the bootstrapped CIs
+#load("2.PoolingMethods_output/2.4.BootCIsHR.Rdata")
+load("2.PoolingMethods_output/2.4.BootCIsHR400Shape.Rdata")
+
+#Load function
+topoolornot <- dget("functions/topoolornot.R")
+
+#PoolDecisions <- list()
+PoolDecisions$BootCIsHR <- list()
+Decisions$PHRboot <- list()
+
+eqregionmatrix = matrix(c(c(0.00001, 1/(0.00001)),
+                          c(0.001, 1/(0.001)),
+                          c(0.01, 1/(0.01)),
+                          c(0.1, 1/(0.1)),
+                          c(0.2, 1/(0.2)),
+                          c(0.25, 1/(0.25)),
+                          c(0.3, 1/(0.3)),
+                          c(0.35, 1/(0.35)),
+                          c(0.4, 1/(0.4)),
+                          c(0.45, 1/(0.45)),
+                          c(0.475, 1/(0.475)),
+                          c(0.5, 1/(0.5)),
+                          c(0.525, 1/(0.525)),
+                          c(0.55, 1/(0.55)),
+                          c(0.575, 1/(0.575)),
+                          c(0.6, 1/(0.6)),
+                          c(0.625, 1/(0.625)),
+                          c(0.65, 1/(0.65)),
+                          c(0.66, 1/(0.66)),
+                          c(0.67, 1/(0.67)),
+                          c(0.675, 1/(0.675)),
+                          c(0.68, 1/(0.68)),
+                          c(0.69, 1/(0.69)),
+                          c(0.7, 1/(0.7)),
+                          c(0.8, 1/(0.8)),
+                          c(0.9, 1/(0.9)),
+                          c(0.999, 1/(0.999))),
+                        nrow=27,              # number of rows 
+                        ncol=2,              # number of columns 
+                        byrow = TRUE)        # fill matrix by rows 
+
+#different thresholds
+for (a in 1:nrow(eqregionmatrix)){
+  PoolDecisions$BootCIsHR[[a]] <- list() #make list for every different threshold
+  Decisions$PHRboot[[a]]<-list() #make list for every different threshold
+
+#different situations
+for (b in 1:8){
+  PoolDecisions$BootCIsHR[[a]][[b]] <- apply(BootCIsHR[[b]], MARGIN = 1, FUN = topoolornot, eqregion = eqregionmatrix [a,]) #make a decision based on the threshold and store the decision
+  
+  Decisions$PHRboot[[a]][[b]]<- matrix(NA, nrow = 1000, ncol = 2) #make a matrix to store the TP & FP
+  colnames(Decisions$PHRboot[[a]][[b]]) <- c("TP", "FP")
+ 
+#different simulated datasets
+for (c in 1:1000) {
+
+#if the decision is pool, extract the decision based on the significance from "alwayspool", otherwise extract from "neverpool". Do this for both the situation where there's an effect (column 1) and where there's no effect (column 2)
+  Decisions$PHRboot[[a]][[b]][c,1] <- if_else(PoolDecisions$BootCIsHR[[a]][[b]][c]== "pool", true = Decisions$PAlwaysPool[[b]][c,1], false = Decisions$PNeverPool[[b]][c,1])
+  
+  Decisions$PHRboot[[a]][[b]][c,2] <- if_else(PoolDecisions$BootCIsHR[[a]][[b]][c]== "pool", true = Decisions$PAlwaysPool[[b]][c,2], false = Decisions$PNeverPool[[b]][c,2])
+}
+}
+}
+
+```
+
+# CI's Rmean 
+```{r}
+load("2.PoolingMethods_output/2.5.CIsRMEAN3Shape.Rdata")
+load("0.DataPreperation_output/0.Historicaldata.Rdata")
+
+#get difference
+survfit_hist <- survfit(Surv(time = STIME18, event = STATUS18, type = "right") ~ 1, data = Dcontrol)
+rmean_hist <- (survival:::survmean(survfit_hist, rmean=548) [[1]]["*rmean"])
+
+CIsRMEANdiff <- CIsRMEAN
+
+#Load function
+topoolornot <- dget("functions/topoolornot.R")
+
+#PoolDecisions <- list()
+PoolDecisions$CIsRMEANdiff <- list()
+Decisions$PRMEANdiff <- list()
+
+eqregionmatrix = matrix(c(c(-0, 0),
+                          c(-10, 10),
+                          c(-20, 20),
+                          c(-30, 30),
+                          c(-35, 35),
+                          c(-37.5, 37.5),
+                          c(-40, 40),
+                          c(-42.5, 42.5),
+                          c(-45, 45),
+                          c(-47.5, 47.5),
+                          c(-50, 50),
+                          c(-52.5, 52.5),
+                          c(-55, 55),
+                          c(-57.5, 57.5),
+                          c(-60, 60),
+                          c(-62.5, 62.5),
+                          c(-65, 65),
+                          c(-67.5, 67.5),
+                          c(-70, 70),
+                          c(-75, 75),
+                          c(-80, 80),
+                          c(-85, 85),
+                          c(-90, 90),
+                          c(-95, 95),
+                          c(-100, 100),
+                          c(-110, 110),
+                          c(-150, 150),
+                          c(-1000, 1000)),
+                        nrow=28,              # number of rows 
+                        ncol=2,              # number of columns 
+                        byrow = TRUE)        # fill matrix by rows 
+
+#different thresholds
+for (a in 1:nrow(eqregionmatrix)){
+  PoolDecisions$CIsRMEANdiff[[a]] <- list() #make list for every different threshold
+  Decisions$PRMEANdiff[[a]]<-list() #make list for every different threshold
+
+  for (b in 1:length(CIsRMEANdiff)){
+  PoolDecisions$CIsRMEANdiff[[a]][[b]] <- apply(CIsRMEANdiff[[b]], MARGIN = 1, FUN = topoolornot, eqregion = eqregionmatrix [a,]) #make a decision based on the threshold and store the decision
+ 
+  Decisions$PRMEANdiff[[a]][[b]]<- matrix(NA, nrow = 1000, ncol = 2) #make a matrix to store the TP & FP
+  colnames(Decisions$PRMEANdiff[[a]][[b]]) <- c("TP", "FP")
+  
+  #different situations
+  
+#different simulated datasets
+for (c in 1:1000) {
+
+#if the decision is pool, extract the decision based on the significance from "alwayspool", otherwise extract from "neverpool". Do this for both the situation where there's an effect (column 1) and where there's no effect (column 2)
+  Decisions$PRMEANdiff[[a]][[b]][c,1] <- if_else(PoolDecisions$CIsRMEANdiff[[a]][[b]][c]== "pool", true = Decisions$PAlwaysPool[[b]][c,1], false = Decisions$PNeverPool[[b]][c,1])
+  Decisions$PRMEANdiff[[a]][[b]][c,2] <- if_else(PoolDecisions$CIsRMEANdiff[[a]][[b]][c]== "pool", true = Decisions$PAlwaysPool[[b]][c,2], false = Decisions$PNeverPool[[b]][c,2])
+}
+}
+}
+
+#topoolornot(CIsRMEANdiff[[1]][[1]], eqregion = eqregionmatrix[1,])
+```
+
+
+```{r}
+load("2.PoolingMethods_output/2.6.Boot_CIsRMEANShapeSNEL.Rdata")
+
+#get difference
+survfit_hist <- survfit(Surv(time = STIME18, event = STATUS18, type = "right") ~ 1, data = Dcontrol)
+rmean_hist <- (survival:::survmean(survfit_hist, rmean=548) [[1]]["*rmean"])
+
+BootCIsRMEANdiff <- list()
+for (i in 1:8){
+BootCIsRMEANdiff[[i]] <- BootCIsRMEAN[[i]]
+}
+
+#Load function
+topoolornot <- dget("functions/topoolornot.R")
+
+#PoolDecisions <- list()
+PoolDecisions$BootCIsRMEANdiff <- list()
+Decisions$PRMEANbootdiff <- list()
+
+eqregionmatrix = matrix(c(c(0, 0),
+                          c(-10, 10),
+                          c(-20, 20),
+                          c(-30, 30),
+                          c(-35, 35),
+                          c(-37.5, 37.5),
+                          c(-40, 40),
+                          c(-42.5, 42.5),
+                          c(-45, 45),
+                          c(-47.5, 47.5),
+                          c(-50, 50),
+                          c(-52.5, 52.5),
+                          c(-55, 55),
+                          c(-57.5, 57.5),
+                          c(-60, 60),
+                          c(-62.5, 62.5),
+                          c(-65, 65),
+                          c(-67.5, 67.5),
+                          c(-70, 70),
+                          c(-75, 75),
+                          c(-80, 80),
+                          c(-85, 85),
+                          c(-90, 90),
+                          c(-95, 95),
+                          c(-100, 100),
+                          c(-110, 110),
+                          c(-150, 150),
+                          c(-1000, 1000)),
+                        nrow=28,              # number of rows 
+                        ncol=2,              # number of columns 
+                        byrow = TRUE)        # fill matrix by rows  
+
+#different thresholds
+for (a in 1:nrow(eqregionmatrix)){
+  PoolDecisions$BootCIsRMEANdiff[[a]] <- list() #make list for every different threshold
+  Decisions$PRMEANbootdiff[[a]]<-list() #make list for every different threshold
+
+#different situations
+for (b in 1:8){
+  PoolDecisions$BootCIsRMEANdiff[[a]][[b]] <- apply(BootCIsRMEANdiff[[b]], MARGIN = 1, FUN = topoolornot, eqregion = eqregionmatrix [a,]) #make a decision based on the threshold and store the decision
+
+  Decisions$PRMEANbootdiff[[a]][[b]]<- matrix(NA, nrow = 1000, ncol = 2) #make a matrix to store the TP & FP
+  colnames(Decisions$PRMEANbootdiff[[a]][[b]]) <- c("TP", "FP")
+  
+#different simulated datasets
+for (c in 1:1000) {
+
+#if the decision is pool, extract the decision based on the significance from "alwayspool", otherwise extract from "neverpool". Do this for both the situation where there's an effect (column 1) and where there's no effect (column 2)
+  Decisions$PRMEANbootdiff[[a]][[b]][c,1] <- if_else(PoolDecisions$BootCIsRMEANdiff[[a]][[b]][c]== "pool", true = Decisions$PAlwaysPool[[b]][c,1], false = Decisions$PNeverPool[[b]][c,1])
+  
+  Decisions$PRMEANbootdiff[[a]][[b]][c,2] <- if_else(PoolDecisions$BootCIsRMEANdiff[[a]][[b]][c]== "pool", true = Decisions$PAlwaysPool[[b]][c,2], false = Decisions$PNeverPool[[b]][c,2])
+}
+}
+}
+```
+
+```{r}
+#save(Decisions, file="3.FinalAnalysis_output/3.DecisionsFinalAnalyses.Rdata")
+#save(PoolDecisions, file = "3.FinalAnalysis_output/3.Pooldecisions.Rdata")
+
+save(Decisions, file="3.FinalAnalysis_output/3.DecisionsFinalAnalyses400rmean3Shape.Rdata")
+save(PoolDecisions, file = "3.FinalAnalysis_output/3.Pooldecisions400rmean3SHAPE.Rdata")
+```
+
+Make a function that returns a list with matrices with proportions
+
+```{r}
+giveproportions <- function(poolingmethod){  
+#input: poolingmethod = decisions$poolingmethod
+  proportions <- list()
+  for (i in 1:length(poolingmethod)){
+    proportions[[i]] <- matrix(NA, nrow = 8, ncol = 5)
+    rownames(proportions[[i]])<- c("Data11","Data12","Data13","Data14","Data21","Data22","Data23","Data24")
+    colnames(proportions[[i]])<- c("TP", "FP", "TP_prop", "FP_prop", "TP/FP")
+    for(a in 1:8){
+      proportions[[i]][a,1] <- sum(poolingmethod[[i]][[a]][,1][1:1000])
+      proportions[[i]][a,2] <- sum(poolingmethod[[i]][[a]][,2][1:1000])
+      proportions[[i]][a,3] <- sum(poolingmethod[[i]][[a]][,1][1:1000]/1000)
+      proportions[[i]][a,4] <- sum(poolingmethod[[i]][[a]][,2][1:1000]/1000)
+      proportions[[i]][a,5] <-  proportions[[i]][a,3]/proportions[[i]][a,4]
+    }}
+  
+  return(proportions)
+}
+```
+
+```{r}
+giveproportionsNOpool <- function(poolingmethod){
+  #input: poolingmethod = decisions$poolingmethod
+  proportions <- list()
+  for (i in 1:length(poolingmethod)){
+    proportions <- matrix(NA, nrow = 8, ncol = 5)
+    rownames(proportions)<- c("Data11","Data12","Data13","Data14","Data21","Data22","Data23","Data24")
+    colnames(proportions)<- c("TP", "FP", "TP_prop", "FP_prop", "TP/FP")
+    for(a in 1:8){
+      proportions[a,1] <- sum(poolingmethod[[a]][,1][1:1000])
+      proportions[a,2] <- sum(poolingmethod[[a]][,2][1:1000])
+      proportions[a,3] <- sum(poolingmethod[[a]][,1][1:1000]/1000)
+      proportions[a,4] <- sum(poolingmethod[[a]][,2][1:1000]/1000)
+      proportions[a,5] <-  proportions[a,3]/proportions[a,4]
+    }}
+  
+  return(proportions)
+}
+```
+
+
+Apply function
+```{r}
+proportions<-list()
+ 
+#Apply first function
+proportions$PPTTP<- giveproportions(Decisions$PTTP)
+proportions$PRMEANbootdiff <- giveproportions(Decisions$PRMEANbootdiff)
+proportions$RMEANdiff <-giveproportions(Decisions$PRMEANdiff)
+proportions$PHRboot <- giveproportions(Decisions$PHRboot)
+proportions$PHR <- giveproportions(Decisions$PHR)
+
+#Apply second function
+proportions$PNeverPool <- giveproportionsNOpool(Decisions$PNeverPool) #incorrect number of dimmensions
+proportions$PAlwaysPool <- giveproportionsNOpool(Decisions$PAlwaysPool) #incorrect number of dimmensions
+
+save(proportions, file="3.FinalAnalysis_output/3.ProportionsTPFPrmeanShape.Rdata")
+
+```
+

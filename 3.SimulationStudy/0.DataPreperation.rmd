@@ -1,0 +1,124 @@
+---
+title: "0.DataPreperation"
+author: "Joukje Willemsen"
+date: "13-05-2020"
+output: html_document
+---
+
+In this document the historical controldataset is prepared. The weibull shape and scale parameters are estimated from the historical controlgroup and the required sample size is calculated. The shape and scale parameter and sample size are used as input parameters in simulating the current control group.
+
+#Load packages
+```{r}
+library(dplyr) #pipes
+library(survival) #surv and survreg
+```
+
+#Load Historical control (PRO-ACT site) and substract the controls
+```{r}
+load("DATA2018.Rdata") #load data 
+
+#Make a subset with only controls
+Dcontrol <- D[which(D$TRT=="N"),]
+Dcontrol <- Dcontrol[complete.cases(Dcontrol[,11]),]
+
+summary(Dcontrol$STIME18)
+```
+
+#Get parameter estimates for input simulation dataset
+```{r}
+survreg<- survreg(Surv(Dcontrol$STIME18, Dcontrol$STATUS18, type = "right") ~ 1, dist = "weibull")
+
+#   survreg's scale  =    1/(rweibull shape)
+#   survreg's intercept = log(rweibull scale)
+
+rweibull_shape = 1/survreg$scale #1.681929
+rweibull_scale = exp(survreg$coefficients) #776.8853
+
+#Store the parameters, they will be used for data simulation later
+scale <- survreg$scale
+intercept <- survreg$coefficients
+
+parameters <- list(shape = rweibull_shape, scale = rweibull_scale)
+```
+
+#Information from the survreg manual:
+There are multiple ways to parameterize a Weibull distribution. The survreg function embeds it in a general location-scale family, which is a different parameterization than the rweibull function, and often leads to confusion.
+   survreg's scale  =    1/(rweibull shape)
+   survreg's intercept = log(rweibull scale)
+   For the log-likelihood all parameterizations lead to the same value.
+y <- rweibull(1000, shape=2, scale=5)
+survreg(Surv(y)~1, dist="weibull")
+
+#Save the parameters (input for 1.SimulatioDataSet)
+```{r}
+save(parameters, file = "0.DataPreperation_output/0.Parameters.Rdata")
+save(Dcontrol, file = "0.DataPreperation_output/0.Historicaldata.RData")
+```
+
+#Survival function & hazard function
+```{r}
+# S(t), the survival function
+curve(pweibull(x, scale=rweibull_scale, shape=rweibull_shape, lower.tail=FALSE), 
+      from=0, to=548, col='red', lwd=2, ylab=expression(hat(S)(t)), xlab='t',bty='n',ylim=c(0,1))
+
+# h(t), the hazard function
+curve(dweibull(x, scale=rweibull_scale, shape=rweibull_shape)
+      /pweibull(x, scale=rweibull_scale, shape=rweibull_shape, lower.tail=FALSE), 
+      from=0, to=548, col='blue', lwd=2, ylab=expression(hat(h)(t)), xlab='t',bty='n')
+par(mfrow=c(1,1),mar=c(5.1,4.1,4.1,2.1))
+
+#S(t): probability ot survive until time = 548
+pweibull(548, scale=rweibull_scale, shape=rweibull_shape, lower.tail=FALSE) #0.5735099
+
+#S(t): probability ot survive until time = 0
+pweibull(0, scale=rweibull_scale, shape=rweibull_shape, lower.tail=FALSE) #1
+```
+
+#Sample size calculation
+Source funtcions: http://reactive.tricals.org/
+```{r}
+WeiRate <- dget("vanEijk_functions/WeiRate.R")
+EvFreedman <- dget("vanEijk_functions/EvFreedman.R")
+PeventWei <- dget("vanEijk_functions/PeventWei.R")
+WeiSurv <- dget("vanEijk_functions/WeiSurv.R")
+```
+
+Calculate acquered sample size
+```{r}
+#########
+# Step 0: set parameters:
+#########
+rateW <- WeiRate(pweibull(548, scale=rweibull_scale, shape=rweibull_shape, lower.tail=FALSE), t=548, p=rweibull_shape)
+
+f <- 548; # minimal follow-up duration 
+a <- 0 # accrual period
+HR <- 0.5 # hazard ratio (placebo vs. treatment)
+alpha <- 0.05
+power <- 0.6
+
+
+#########
+# Step 1: Calculate number of necessary events:
+#########
+Ev1 <- ceiling (EvFreedman (HR = HR, alpha = alpha, power = power))
+
+#########
+# Step 2: Calculate event probabilities:
+#########
+
+### Weibull:
+Pwei <- PeventWei(rateW = rateW, f = 548, a = 0, HR = HR, p = rweibull_shape)
+#0.6189275
+
+#########
+# Step 3: Calculate sample size [rounded, total sample size]:
+#########
+SampleSize <- ceiling ((Ev1/Pwei)/2)*2
+# 136
+```
+
+#Save the parameters (input for 1.Datasimulation and 1.Datasimulation_shape)
+```{r}
+save(SampleSize, file = "0.DataPreperation_output/0.SampleSize.Rdata")
+save(HR, file = "0.DataPreperation_output/0.HRcont_exp.Rdata")
+```

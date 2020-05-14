@@ -1,0 +1,319 @@
+---
+title: "1.DataSimulation"
+author: "Joukje Willemsen"
+date: "13-05-2020"
+output: html_document
+---
+
+In this document the current controls and the corresponding experimental datasets for the scenarios referred to as A, B, E1-3 and F1-3 in the article are simulated and stored.
+
+Please note that:
+
+Data11 = Scenario A
+
+Data12 = Scenario E1
+
+Data13 = Scenario E2
+
+Data14 = Scenario E3
+
+Data21 = Scenario B
+
+Data22 = Scenario F1
+
+Data23 = Scenario F2
+
+Data24 = Scenario F3
+
+#Load packages
+```{r}
+library(dplyr)
+library(survival)
+```
+
+#Load estimated parameters, the calculated samplesize & HR from 0.DataPreperation
+```{r}
+load("0.DataPreperation_output/0.Parameters.RData") #load parameters Weibull distribution
+load("0.DataPreperation_output/0.SampleSize.RData") #load the calculated sample size
+load("0.DataPreperation_output/0.HRcont_exp.Rdata") #load HR used to calculate samplesize
+```
+
+#Function to simulate Time Until Mortality
+```{r}
+TimeUntilMortality <- function(shapeparameter = parameters$shape,scaleparameter,treatmenteffect = HR, allocation,sdrandomeffectcluster, Tmax = 548, pcont = 0.5, N = SampleSize)
+  
+  {
+#Make 3 groups:
+# 0 controlgroup
+# 1 exp group where HR = HR
+# 2 exp group where HR = 1
+
+Data <- as.data.frame(c(rep.int(0, pcont*N), rep.int(1, (1-pcont)*N),rep.int(2, (1-pcont)*N)))
+colnames(Data)<-"allocation"
+
+#Indicate whether an effect should be simulated (only when allocation = 1)
+Data$effectgroup <- if_else(Data$allocation == 1, 1, 0)
+
+#Generate random effect cluster
+Data$randomeffectcluster <- rnorm(1, mean = 0, sd = sdrandomeffectcluster)
+
+#Generate Time until mortality
+Data$TUM <- Data %>% 
+               nrow() %>% 
+               rweibull(shapeparameter,scaleparameter*exp(-(Data$effectgroup*treatmenteffect+
+                 Data$randomeffectcluster)/shapeparameter))
+
+#Add censoring indicator
+Data$censoring <- ifelse(Data$TUM>Tmax, yes = 1, no = 0)
+Data$survivalcensored <- ifelse(Data$TUM>Tmax, yes = Tmax, no = Data$TUM)
+
+#Add status indicator
+Data$StatusIndicator <- ifelse(Data$TUM>Tmax, yes=0, no = 1) 
+
+return(Data)
+}
+```
+
+#Input for the different scenarios
+Set different parameters (see researchreport)
+```{r}
+shapeparameter = c(parameters$shape, (parameters$shape+0.1*parameters$shape), (parameters$shape+0.2*parameters$shape), (parameters$shape+0.3*parameters$shape), (parameters$shape+0.4*parameters$shape))
+scaleparameter = c(parameters$scale, parameters$scale+100) #HR=c(1, 1.128719)
+treatmenteffect = HR #the HR used in 0.DataPreperation to calculate the sample size
+sdrandomeffectcluster = 0
+```
+
+#Simulate datasets
+```{r}
+set.seed(123)
+
+Data11 <- TimeUntilMortality(scaleparameter = scaleparameter[1], sdrandomeffectcluster = 0, shapeparameter = shapeparameter[1])
+
+Data12 <- TimeUntilMortality(scaleparameter = scaleparameter[1], sdrandomeffectcluster = 0, shapeparameter = shapeparameter[2])
+
+Data13 <- TimeUntilMortality(scaleparameter = scaleparameter[1], sdrandomeffectcluster = 0, shapeparameter = shapeparameter[3])
+
+Data14 <- TimeUntilMortality(scaleparameter = scaleparameter[1], sdrandomeffectcluster = 0, shapeparameter = shapeparameter[4])
+
+Data21 <- TimeUntilMortality(scaleparameter = scaleparameter[2], sdrandomeffectcluster = 0, shapeparameter = shapeparameter[1])
+
+Data22 <- TimeUntilMortality(scaleparameter = scaleparameter[2], sdrandomeffectcluster = 0, shapeparameter = shapeparameter[2])
+
+Data23 <- TimeUntilMortality(scaleparameter = scaleparameter[2], sdrandomeffectcluster = 0, shapeparameter = shapeparameter[3])
+
+Data24 <- TimeUntilMortality(scaleparameter = scaleparameter[2], sdrandomeffectcluster = 0, shapeparameter = shapeparameter[4])
+```
+
+
+#Function to create 1000 replications
+```{r}
+replicatedatasets <- function(scaleparameter, sdrandomeffectcluster, shapeparameter, nrep = 1000){
+  
+namedata <- list()
+for(i in 1:nrep){
+  tmp  <- TimeUntilMortality(scaleparameter = scaleparameter, sdrandomeffectcluster = sdrandomeffectcluster, shapeparameter = shapeparameter, pcont = 0.5, N = SampleSize, treatmenteffect = HR) 
+  name <- paste('iteration:',i,sep='')
+  namedata[[name]] <- tmp
+}
+return(namedata)
+}
+```
+
+
+#Replicate the proces of generating the datasets 1000 times and store them in a list
+```{r}
+set.seed(123)
+
+Data11_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[1], shapeparameter = shapeparameter[1])
+
+set.seed(123)
+
+Data12_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[1], shapeparameter = shapeparameter[2])
+
+set.seed(123)
+
+Data13_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[1], shapeparameter = shapeparameter[3])
+
+set.seed(123)
+
+Data14_list <- replicatedatasets(scaleparameter = scaleparameter[1], sdrandomeffectcluster = sdrandomeffectcluster[1], shapeparameter = shapeparameter[4])
+
+set.seed(123)
+
+Data21_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[1], shapeparameter = shapeparameter[1])
+
+set.seed(123)
+
+Data22_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[1], shapeparameter = shapeparameter[2])
+
+set.seed(123)
+
+Data23_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[1], shapeparameter = shapeparameter[3])
+
+set.seed(123)
+
+Data24_list <- replicatedatasets(scaleparameter = scaleparameter[2], sdrandomeffectcluster = sdrandomeffectcluster[1], shapeparameter = shapeparameter[4])
+```
+
+#Store the lists in one big list
+```{r}
+ALLdata <- list(Data11_list, Data12_list, Data13_list, Data14_list,
+                    Data21_list, Data22_list, Data23_list, Data24_list)
+```
+
+#Also store a subset with only controls and only experimental (both with HR=1 and HR=0.5)
+```{r}
+#Simulated control group
+Hcontrol <- list()
+for (a in 1:8){#for every scenario
+  Hcontrol[[a]]<-list()
+  for (b in 1:1000){#for every simulation
+  Hcontrol[[a]][[b]]<- ALLdata[[a]][[b]][which(ALLdata[[a]][[b]]$allocation==0),]#Extract the control group
+  }
+}
+
+#Simulated experimental group with an effect present
+HexpTP <- list()
+for (a in 1:8){
+  HexpTP[[a]]<-list()
+  for (b in 1:1000){
+  HexpTP[[a]][[b]]<- ALLdata[[a]][[b]][which(ALLdata[[a]][[b]]$allocation==1),]#Extract the experimental group
+  }
+}
+
+#Simulated experimental group where no effect is present
+HexpFP <- list()
+for (a in 1:8){
+  HexpFP[[a]]<-list()
+  for (b in 1:1000){
+  HexpFP[[a]][[b]]<- ALLdata[[a]][[b]][which(ALLdata[[a]][[b]]$allocation==2),]
+  }
+}
+```
+
+#Save datasets
+```{r}
+save(Hcontrol, file="1.DataSimulation_output/1.HcontrolShape.Rdata")
+save(HexpTP, file = "1.DataSimulation_output/1.HexpTPShape.Rdata")
+save(HexpFP, file = "1.DataSimulation_output/1.HexpFPShape.Rdata")
+```
+
+## Extra: visualize & test assumptions
+
+#Test whether the parameters of the historical & current datasets are about equal
+
+```{r}
+load("0.DataPreperation_output/0.Historicaldata.RData") #Load Dcontrol
+```
+
+# Make a table that displays the estimated shape & scale parameters of the simulated and historical data
+```{r}
+#Obtain estimates for the historical and current controls
+hist_survreg<- survreg(Surv(Dcontrol$STIME18, Dcontrol$STATUS18, type = "right") ~ 1, dist = "weibull")
+curr_survreg<- survreg(Surv(Hcontrol[[1]][[1]]$survivalcensored, Hcontrol[[1]][[1]]$StatusIndicator, type = "right") ~ 1, dist = "weibull")
+
+# Make a table that displays the estimated shape & scale parameters of the simulated and historical data
+parameters <- round(matrix((c(1/hist_survreg$scale, exp(hist_survreg$coefficients), 1/curr_survreg$scale, exp(curr_survreg$coefficients))), ncol = 2, nrow = 2),2)
+
+#Add rownames and colnames
+colnames(parameters) <- c('hist', 'cur')
+rownames(parameters) <- c('shape', 'scale')
+
+#Display table
+parameters
+```
+
+
+#Function that tests assumption of proportional hazards
+```{r}
+assumptionHR <- function (df)
+{
+fit <- coxph(Surv(time=survivaltime, event=event)~indicator, data = data.frame(
+survivaltime=c(Dcontrol$STIME18, df$survivalcensored),
+event = c(Dcontrol$STATUS18, df$StatusIndicator),
+indicator=c(rep(1, length(Dcontrol$STIME18)),rep(0, length(df$survivalcensored)))))
+return(cox.zph(fit))
+}
+```
+
+#Test assumption for Hcontrol[[1]][[1]]
+```{r}
+assumptionHR(Hcontrol[[1]][[1]])
+```
+The assumption is met, p > 0.05
+
+#Function to make Hazard Rates plot
+```{r}
+HRplot <- function(df)
+{
+plot <- plot(survfit(Surv(time=survivaltime, event=event, type = "right")~indicator, data = data.frame(
+survivaltime=c(Dcontrol$STIME18, df$survivalcensored),
+event = c(Dcontrol$STATUS18, df$StatusIndicator),
+indicator=c(rep(1, length(Dcontrol$STIME18)),rep(0, length(df$survivalcensored))))), main = "Plot of Survival Curves by treatment", xlab = "Length of Survival",ylab="Proportion of Individuals who have Survived",col=c("blue","red"), mark.time=TRUE) #mark.time are censoring markers
+legend("topright", legend=c("Current", "Historical"),fill=c("blue","red"),bty="n")
+return(plot)
+}
+```
+
+#Use GGplot2 to make hazard plots
+```{r}
+library("ggplot2")
+library("survival")
+library("survminer")
+
+#Compute two survival curves (PFS and OS), null models
+Historical <- survfit( Surv(STIME18, STATUS18) ~ 1, data = Dcontrol)
+Current <- survfit( Surv(survivalcensored, StatusIndicator) ~ 1, data = Hcontrol[[1]][[1]])
+
+#Combine the two survival curves on one graph:
+fit <- list(Historical = Historical, Current = Current)
+ggsurvplot(fit, combine = TRUE, # Combine curves
+           surv.median.line = "hv", # Add medians survival
+           risk.table = TRUE,                  # Add risk table
+           conf.int = TRUE,                    # Add confidence interval
+           pval = TRUE,                        # Add p-value and tervals
+           conf.int.style = "step",            # CI style, use "step" or "ribbon"
+           censor = FALSE,                     # Remove censor points
+           tables.theme = theme_cleantable(),  # Clean risk table
+           legend.title = "Data",              # Change legends: title & labels
+           legend.labs = c("Historical","Current"), #labels
+           palette = c("#E7B800", "#2E9FDF") #colour palette
+           )                      
+``` 
+
+#Make function to give the average number of events (StatusIndicator = 1)
+```{r}
+sumlist <- function(list){
+
+sum <- vector(length = 100)
+
+for(i in 1:100){
+ subset <- list[[i]]
+ sum[i] <- sum(subset$StatusIndicator)
+}
+ mean_sum <- mean(sum)  
+ return(mean_sum)
+}
+```
+
+#Give the number of events for every simulated dataset
+```{r}
+#calculate the number of events
+Nevents <- matrix(c(
+sumlist(list = Data11_list),
+sumlist(list = Data12_list),
+sumlist(list = Data13_list),
+sumlist(list = Data14_list),
+sumlist(list = Data21_list),
+sumlist(list = Data22_list),
+sumlist(list = Data23_list),
+sumlist(list = Data24_list)), ncol = 2, nrow = 4)
+
+#add colnames
+colnames(Nevents) <- c('scalepar = 429', 'scalepar = 403')
+rownames(Nevents) <- c('sdrandomcluster = 0', 'sdrandomcluster = 0.1', 'sdrandomcluster = 0.2','sdrandomcluster = 0.4')
+
+#display table
+Nevents
+```
+
