@@ -12,9 +12,12 @@ Including historical controls in the analysis of a new study can potentially imp
 ---
 | Files/Folders              | Description   |
 | -----------------          | ------------- |
-|1. Thesis.pdf               |The reference pdf titled "Shortcomings of the test-then-pool method and equivalence testing as a more appropriate method of including historical controls" by Joukje Willemsen|
-|2. Plots                    |Folder containing the png's and R-script of the figures as presented in the manuscript|
-|3. SimulationStudy	     |A R-project containing the compiled and raw RMD scripts used for the simulationstudy and the saved R workspace
+|1. Article             |Contains both the pdf of the manuscript titled "Shortcomings of the test-then-pool method and equivalence testing as a more appropriate method of including historical controls" and the LaTeX files used to compile this pdf|
+|2. Supplemental figures                    |Folder containing the png's and R-script of the supplemental figures as presented in the manuscript|
+|3. SimulationStudy	     |A R-project containing the compiled and raw RMD scripts used to simulate data, perform poolingmethods, analyse the results and make the plots as presented in the manuscript|
+|A. Data storage |Contains a READ.ME with more information about the data storage|
+|B. Privacy & datamenagement |Contains a READ.ME with more information about the privacy & datamanagement|
+|C. Permission and access |Contains a READ.ME with more information about the permission and access|
 
 ---
 **Permission and access**
