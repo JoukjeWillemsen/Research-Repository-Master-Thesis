@@ -74,5 +74,5 @@ The package versions of the R-packages applied in this simulationstudy are state
 | `ggpubr`                    |0.2.4         | Alboukadel Kassambara (2019). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.2.4. https://CRAN.R-project.org/package=ggpubr|
 | `survminer`                 |0.4.6|       Alboukadel Kassambara, Marcin Kosinski and Przemyslaw Biecek (2019). survminer: Drawing Survival Curves using 'ggplot2'. R package version 0.4.6.   https://CRAN.R-project.org/package=survminer|
 
-
+---
 Joukje Willemsen, 14-05-2020
