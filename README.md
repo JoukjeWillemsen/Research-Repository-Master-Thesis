@@ -1,11 +1,6 @@
 DATA ARCHIVE
 ===
-
-Incorporating historical controls in confirmatory clinical trials using frequentist methods that comprise equivalence testing
-
----
-This repository serves as a research archive for the manuscript "Incorporating historical controls in confirmatory clinical trials using frequentist methods that comprise equivalence testing
-"
+This repository serves as a research archive for the manuscript "Incorporating historical controls in confirmatory clinical trials using frequentist methods that comprise equivalence testing"
 ---
 ---
 | Files/Folders              | Description   |
