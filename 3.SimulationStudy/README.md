@@ -5,7 +5,7 @@ This README contains a detailled description of the simulationprocedure to repli
 Please note that this simulation study has (last) been executed from 28-04-20 until 30-04-20. The seed numbers of the random generator are stated in the R-code.
 
 ---
-**Obtaining the PRO-ACT database & datapreperation**
+**Obtaining the PRO-ACT database & data preperation**
 ---
 Please register, and download the PRO-ACT dataset [here](https://nctu.partners.org/ProACT/Data/Index/1). Only the variables concerning the allocation, survival and survivaltime are of interest. Cases that contain missingness in any of these variables are removed. Because most ALS-trials have a follow up of 18 months (548 days) or less, the variables Subject_Died and Death_Days are censored at 548 days.
 
