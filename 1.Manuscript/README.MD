@@ -1,4 +1,4 @@
--Manuscript
+Manuscript
 ===
 This folder contains:
 * a PDF of the manuscript `Willemsen, J.E. Shortcommings of the TTP, ...`
