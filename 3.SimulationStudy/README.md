@@ -4,18 +4,18 @@ This README contains a detailled description of the simulationprocedure to repli
 
 Please note that this simulation study has (last) been executed from 28-04-20 until 30-04-20. The seed numbers of the random generator are stated in the R-code.
 
-The package versions of the R-packages applied in this simulationstudy are stated below. The operation system of the computer is Windows 10 Home, 64-bit. The simulation study is performed in R, version 3.6.2 (Rstudio version 1.1.456). The approximated runningtime for both the simulationstudies (all the rmd. files in this folder) is 28 hours, which is largely due to the long runningtime of 'A.2.4.Equivalence-testing HR boot', 'B.2.4.Equivalence-testing HR boot', 'A.2.5.Equivalence-testing rMean boot' and 'B.2.5.Equivalence-testing rMean boot'.
+The package versions of the R-packages applied in this simulationstudy are stated below. The operation system of the computer is Windows 10 Home, 64-bit. The simulation study is performed in R, version 3.6.2 (Rstudio version 1.1.456). The approximated runningtime for both the simulationstudies (all the rmd. files in this folder) is 28 hours, which is largely due to the long runningtime of `A.2.4.Equivalence-testing HR boot`, `B.2.4.Equivalence-testing HR boot`, `A.2.5.Equivalence-testing rMean boot` and `B.2.5.Equivalence-testing rMean boot`.
 
 
 | R-package                  | Package version |
 | -----------------          | ------------- |
-| 'Survival'                 |3.1.8 |
-| 'Boot'             |1.3.23 |
-| 'GGplot2'                   |3.2.1 |
-| 'Coxplot'                   |1.0.0|
-| 'dplyr'                     |0.8.4|
-| 'ggpubr'                    |0.2.4|
-| 'survminer'                 |0.4.6|
+| `Survival`                 |3.1.8 |
+| `Boot`             |1.3.23 |
+| `GGplot2`                   |3.2.1 |
+| `Coxplot`                   |1.0.0|
+| `dplyr`                     |0.8.4|
+| `ggpubr`                    |0.2.4|
+| `survminer`                 |0.4.6|
 
 ---
 **Obtaining the PRO-ACT database & datapreperation**
@@ -36,9 +36,9 @@ P
 * In simulationstudy A, the scenarios A,B,C1-3 and D1-3 are simulated.
 * In simulationstudy B, the scenarios A,B,E1-3 and F1-3 are simulated.
 
-Hence, there are two versions of every rmd file (except '0.DataPreperation'), either starting with "A." or "B.". 
+Hence, there are two versions of every rmd file (except `0.DataPreperation`), either starting with "A." or "B.". 
 
-For both the simulation studies, run the rmd files stored in this folder starting from 'O.DataPreperation' to 'A/B.DataVisualization' in the right order as presented below.  
+For both the simulation studies, run the rmd files stored in this folder starting from `O.DataPreperation` to `A/B.DataVisualization` in the right order as presented below.  
  
 
 | Files                      | Description   |
@@ -55,27 +55,20 @@ For both the simulation studies, run the rmd files stored in this folder startin
 |3.FinalAnalysis   | Execute the final analysis (Experimental vs Controlgroup) for all the pooled and not-pooled datasets for a range of difference decisionthresholds|
 |4.DataAnalysis | Calculate and visualize the proportion of false positives and true positives for each poolingmethod
 
-At the end of every rmd file the raw data output is stored in the folder with the corresponding number (for example the output of '0.DataPreperation' is stored in the folder '0.DataPreperation_output'). At the start of the next rmd file the required data is extracted from these folders. A description of the folders stored in this folder is presented below:
+At the end of every rmd file the raw data output is stored in the folder with the corresponding number (for example the output of `0.DataPreperation` is stored in the folder `0.DataPreperation_output`). At the start of the next rmd file the required data is extracted from these folders. A description of the folders stored in this folder is presented below:
 
 | Folder                     | Description   |
 | -----------------          | ------------- |
-|0.DataPreperation_output    |Raw data files, output from '0.DataPreperation|
-|1.DataSimulation_ouput      |Raw data files, output from the rmd files 'A.1.DataSimulation' and 'B.1.DataSimulation'|
-|2.PoolingMethods_ouput      |Raw data files, output from the rmd files staring with 'A.2' and 'B.2'|
-|3.FinalAnalysis_ouput       |Raw data files, output from the rmd files starting with 'A.3' and 'B.3'|
-|4.DataVisualization_ouput   |Raw data files, output from the rmd files starting with 'A.4' and 'B.4'|
+|0.DataPreperation_output    |Raw data files, output from `0.DataPreperation`|
+|1.DataSimulation_ouput      |Raw data files, output from the rmd files `A.1.DataSimulation` and `B.1.DataSimulation`|
+|2.PoolingMethods_ouput      |Raw data files, output from the rmd files staring with `A.2` and `B.2`|
+|3.FinalAnalysis_ouput       |Raw data files, output from the rmd files starting with `A.3` and `B.3`|
+|4.DataVisualization_ouput   |Raw data files, output from the rmd files starting with `A.4` and `B.4`|
 |Compiled HTMLs              |Compiled HTMLs of the rmd files as described above |
 |functions                   |contains R files with functions that are used multiple times in the rmd files described above|
 |vanEijk_functions           |contains R files with functions that are both not part of a package and not written by me, with a README file with a refference|
 
 --
-The resulting graphs and proportions can be find in the folder '4.DataVisualization_ouput'.
+The resulting graphs and proportions can be find in the folder `4.DataVisualization_ouput`.
 
 Joukje Willemsen, 14-05-2020
-
-
-
-
-
-
-
