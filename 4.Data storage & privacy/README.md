@@ -18,7 +18,7 @@ The use of the PRO-ACT dataset in this study is conform the [terms and condition
 
 **Storage**
 
-Statement four of the terms and conditions of using the PRO-ACT dataset states that the PRO-ACT Database should not be shared with anyone who has not signed the agreement and acknowledged the terms and conditions. Hence only summarystatistics are stored in this research archive and no raw data that contain parts of the PRO-ACT dataset in any way are shared online. Therefore, the files `DATA2018` and `0.Historicaldata` - needed to replicate the simulationstudy - are not part of this research archive, as they contain (a part of) the PRO-ACT dataset. However, after registration, the PRO-ACT dataset can be downloaded [from their website](https://nctu.partners.org/ProACT/Data/Index/1) to fully replicate the simulationstudy.
+Statement four of the terms and conditions of using the PRO-ACT dataset states that the PRO-ACT Database should not be shared with anyone who has not signed the agreement and acknowledged the terms and conditions. Hence only summarystatistics are stored in this research archive and no raw data that contain parts of the PRO-ACT dataset in any way are shared online. Therefore, the raw data files `DATA2018`, `0.Historicaldata` and `2.1.AlwaysPool`  are not part of this research archive, as they contain (a part of) the PRO-ACT dataset. However, after registration, the PRO-ACT dataset can be downloaded [from their website](https://nctu.partners.org/ProACT/Data/Index/1) to fully replicate the simulationstudy.
 
 The data will be stored for a minimal duration of ten years. A copy of this respository has been stored to the secured O-drive of the University of Utrecht faculty server.
 
