@@ -4,19 +4,6 @@ This README contains a detailled description of the simulationprocedure to repli
 
 Please note that this simulation study has (last) been executed from 28-04-20 until 30-04-20. The seed numbers of the random generator are stated in the R-code.
 
-The package versions of the R-packages applied in this simulationstudy are stated below. The operation system of the computer is Windows 10 Home, 64-bit. The simulation study is performed in R, version 3.6.2 (Rstudio version 1.1.456). The approximated runningtime for both the simulationstudies (all the rmd. files in this folder) is 28 hours, which is largely due to the long runningtime of `A.2.4.Equivalence-testing HR boot`, `B.2.4.Equivalence-testing HR boot`, `A.2.5.Equivalence-testing rMean boot` and `B.2.5.Equivalence-testing rMean boot`.
-
-
-| R-package                  | Package version |
-| -----------------          | ------------- |
-| `Survival`                 |3.1.8 |
-| `Boot`             |1.3.23 |
-| `GGplot2`                   |3.2.1 |
-| `Coxplot`                   |1.0.0|
-| `dplyr`                     |0.8.4|
-| `ggpubr`                    |0.2.4|
-| `survminer`                 |0.4.6|
-
 ---
 **Obtaining the PRO-ACT database & datapreperation**
 ---
@@ -70,5 +57,22 @@ At the end of every rmd file the raw data output is stored in the folder with th
 
 --
 The resulting graphs and proportions can be find in the folder `4.DataVisualization_ouput`.
+
+---
+Operating system and package versions
+---
+The package versions of the R-packages applied in this simulationstudy are stated below. The operation system of the computer is Windows 10 Home, 64-bit. The simulation study is performed in R, version 3.6.2 (Rstudio version 1.1.456). The approximated runningtime for both the simulationstudies (all the rmd. files in this folder) is 28 hours, which is largely due to the long runningtime of `A.2.4.Equivalence-testing HR boot`, `B.2.4.Equivalence-testing HR boot`, `A.2.5.Equivalence-testing rMean boot` and `B.2.5.Equivalence-testing rMean boot`.
+
+
+| R-package                  | Package version | Cite |
+| -----------------          | -------------       | ------------- |
+| `Survival`                 |3.1.8                | Therneau T (2015). _A Package for Survival Analysis in S_. version 2.38, <URL: https://CRAN.R-project.org/package=survival>.|
+| `Boot`                     |1.3.23         | Angelo Canty and Brian Ripley (2019). boot: Bootstrap R (S-Plus) Functions. R package version 1.3-23.|
+| `GGplot2`                   |3.2.1         | H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016|
+| `Cowplot`                   |1.0.0         | Claus O. Wilke (2019). cowplot: Streamlined Plot Theme and Plot Annotations for 'ggplot2'. R package version 1.0.0. https://CRAN.R-project.org/package=cowplot |
+| `dplyr`                     |0.8.4         | Hadley Wickham, Romain François, Lionel Henry and Kirill Müller (2020). dplyr: A Grammar of Data Manipulation. R package version 0.8.4. https://CRAN.R-project.org/package=dplyr|
+| `ggpubr`                    |0.2.4         | Alboukadel Kassambara (2019). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.2.4. https://CRAN.R-project.org/package=ggpubr|
+| `survminer`                 |0.4.6|       Alboukadel Kassambara, Marcin Kosinski and Przemyslaw Biecek (2019). survminer: Drawing Survival Curves using 'ggplot2'. R package version 0.4.6.   https://CRAN.R-project.org/package=survminer|
+
 
 Joukje Willemsen, 14-05-2020
