@@ -16,6 +16,3 @@ This repository contains all necessary files to replicate the simulation study f
 |3. SimulationStudy	     |A R-project containing the compiled and raw RMD scripts used for the simulationstudy and the saved R workspace
 
 For any help with the files in this archive, please contact Joukje Willemsen (j.e.willemsen@uu.nl). 
-
-
-$$$$$$IETSOVERPRICVACY$$$$
