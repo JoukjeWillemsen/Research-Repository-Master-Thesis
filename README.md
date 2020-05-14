@@ -1,6 +1,8 @@
 DATA ARCHIVE
 ===
-This repository serves as a research archive for the manuscript "Incorporating historical controls in confirmatory clinical trials using frequentist methods that comprise equivalence testing"
+This repository serves as a research archive for the manuscript "Incorporating historical controls in confirmatory clinical trials using frequentist methods that comprise equivalence testing" for the masters programme Methodology & Statistics for the Behavioural, Biomedical and Social Science at Utrecht University.
+
+The manuscript has not yet been published. The manuscript was handed in as master thesis at 11-05-2020.
 
 ---
 **Abstract**
@@ -12,38 +14,43 @@ Including historical controls in the analysis of a new study can potentially imp
 ---
 | Files/Folders              | Description   |
 | -----------------          | ------------- |
-|1. Article             |Contains both the pdf of the manuscript titled "Shortcomings of the test-then-pool method and equivalence testing as a more appropriate method of including historical controls" and the LaTeX files used to compile this pdf|
-|2. Supplemental figures                    |Folder containing the png's and R-script of the supplemental figures as presented in the manuscript|
-|3. SimulationStudy	     |A R-project containing the compiled and raw RMD scripts used to simulate data, perform poolingmethods, analyse the results and make the plots as presented in the manuscript|
-|A. Data storage |Contains a READ.ME with more information about the data storage|
-|B. Privacy & datamenagement |Contains a READ.ME with more information about the privacy & datamanagement|
-|C. Permission and access |Contains a READ.ME with more information about the permission and access|
+|`1. Manuscript`          |Contains both the pdf of the manuscript titled "Shortcomings of the test-then-pool method and equivalence testing as a more appropriate method of including historical controls" and the material files used to compile this pdf|
+|`2. Supplemental figures`                    |Folder containing compiled and raw RMD scripts and the png's of the supplemental figures as presented in the manuscript|
+|`3. SimulationStudy`	     |A R-project containing the compiled and raw RMD scripts used to simulate data, perform poolingmethods, analyse the results and make the plots as presented in the manuscript|
+|`4. Data storage & privacy` |Contains a READ.ME with information about permission, storage and privacy|
+
+---
+**Data storage**
+---
+
+**Datamanagment & ethical approval**
+For details about datamanegement and ethical approval, please visist [`4. Data storage & privacy`](https://github.com/JoukjeWillemsen/Research-Repository-Master-Thesis/tree/master/4.Data%20storage%20%26%20privacy).
+
+**Replication**
+For a detailled description of the simulationprocedure to replicate the obtained results please visit [`3. SimulationStudy`](https://github.com/JoukjeWillemsen/Research-Repository-Master-Thesis/tree/master/3.SimulationStudy).
+
+---
+**Privacy**
+---
+
+**data protection impact assessment**
+
+The PRO-ACT database is already publicly available with the goal of facilitating research that might benefit future ALS patients. The research question of this manuscript is in line with this goal; if a more appropriate method of including historical controls can be established, future (ALS) trials can benefit from this knowledge and in some cases underpowered and/or biased studies can be prevented. The PRO-ACT database provides real-world historical controls, and therefore provided the simulation study with a more realistic working example. 
+The use of the PRO-ACT dataset in this study is conform the [terms and conditions of the PRO-ACT database](https://nctu.partners.org/ProACT/Document/DisplayLatest/1) and not shared with others or stored elsewhere. Hence no additional burden, risks or privacyproblems is caused by this study for any of the participants who originally took part of the trials inlcuded in the PRO-ACT database.
+
+**informed consent & anonymization/pseudonymization**
+
+On the website of PRO-ACT, there's the following ethical statement: "In all of the trials that generated the data included in this database, study protocols were approved by the participating medicalcenters and all participating patients gave informed consent. De-identified data from these trials were donated to the PRO-ACT database for research purposes only and under the explicit conditions that Prize4Life and all users of the data would maintain the anonymity of subjects and not attempt to discover the identity of any subject. In the rare cases where donated data was not already completely anonymized, donated data was further anonymized following the HIPAA de-identification conventions for personal health information: any potential patient initials and/or dates of birth were removed, new randomized subject numbers were created, and wherever possible, trial-specific information was removed in the merging of datasets, including trial center identity and location, trial dates, or other identifying information."
+
+The PRO-ACT database is publicly available. However, statement four of the terms and conditions of using the PRO-ACT dataset states that the PRO-ACT Database should not be shared with anyone who has not signed the agreement and acknowledged the terms and conditions. Hence only summarystatistics are stored in this research archive and no raw data that contain parts of the PRO-ACT dataset in any way are shared online. 
+
+For more information about the collection of the data, informed consent and how privacy is guaranteed I would like to refer to the [PRO-ACT website](https://nctu.partners.org/ProACT/Document/DisplayLatest/9) and [the article of Atassi et al. (2014)](https://www.ncbi.nlm.nih.gov/pubmed/25298304)
 
 ---
 **Permission and access**
 ---
-**Datamanagment, privacy & ethical approval**
 
-The parameters used to simulate the current controls were based on the PRO-ACT dataset. Furthermore, the data from the controlgroups in the PRO-ACT dataset was used to represent historical controls. 
-After registration, the PRO-ACT dataset can be downloaded [here](https://nctu.partners.org/ProACT/Data/Index/1).
-
-**Ethical approval**
-I have been granted permission by the NCRI team to download data from the PRO-ACT database.
-The use of the PRO-ACT dataset in this simulationstudy is approved by the Ethics Committee of the Faculty of Social and Behavioural Sciences of Utrecht
-University, filed under number 19-125.
-
-**Privacy**
-On the website of [PRO-ACT](https://nctu.partners.org/ProACT/Document/DisplayLatest/2#anchor_0), there's the following ethical statement:
-*"In all of the trials that generated the data included in this database, study protocols were approved by the participating medicalcenters and all participating patients gave informed consent. De-identified data from these trials were donated to the PRO-ACT database for research purposes only and under the explicit conditions that Prize4Life and all users of the data would maintain the anonymity of subjects and not attempt to discover the identity of any subject. In the rare cases where donated data was not already completely anonymized, donated data was further anonymized following the HIPAA de-identification conventions for personal health information: any potential patient initials and/or dates of birth were removed, new randomized subject numbers were created, and wherever possible, trial-specific information was removed in the merging of datasets, including trial center identity and location, trial dates, or other identifying information."*
-
-*Data management*
-Among the terms and conditions of using the PRO-ACT dataset is the following:
-
-- "I will not share access to the PRO-ACT Database with anyone who has not signed this agreement and acknowledged the terms and conditions set forth herein."
-
-Hence only summarystatistics are stored in this research archive and no datasets that contain parts of the PRO-ACT dataset in any way are shared online. Hence, the files `DATA2018` and `0.Historicaldata` - needed to replicate the simulationstudy - are not stored and shared online, as they contain (a part of) the PRO-ACT dataset. However, after registration, the PRO-ACT dataset can be downloaded [here](https://nctu.partners.org/ProACT/Data/Index/1).
-
-The Rcode used to simulate historical controls, to obtain the decision qualities of different pooling methods and to obtain the figures presented in the paper are shared on github.
+This research archive is publicly available and shared on [github](https://github.com/JoukjeWillemsen/Research-Repository-Master-Thesis). A copy of this repository has been stored in the archives of Utrecht University. The data will be stored for a minimal duration of ten years.
 
 ---
 
