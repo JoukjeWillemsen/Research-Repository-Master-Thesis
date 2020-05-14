@@ -6,7 +6,7 @@ function (dataset) #input: Hcontrol[[1]]
   
   
   
-  for (i in 1:1000){ #the minus 1 because the last 1 is the decision indicator
+  for (i in 1:1000){ 
     
     datasetpooled[[i]] <- if (dataset$decision[i] == "pool") 
       
