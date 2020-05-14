@@ -1,4 +1,4 @@
-Instructions datareplication 
+Instructions for data replication 
 ===
 This README contains a detailled description of the simulationprocedure to replicate the obtained results. 
 
