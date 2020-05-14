@@ -2,7 +2,9 @@ Instructions for data replication
 ===
 This README contains a detailled description of the simulationprocedure to replicate the obtained results. 
 
-Please note that this simulation study has (last) been executed from 28-04-20 until 30-04-20. The seed numbers of the random generator are stated in the R-code.
+Please note that this simulation study has (last) been executed from 28-04-20 until 30-04-20. For the simulation study the PRO-ACT dataset version December 2015 is used.
+ 
+The seed numbers of the random generator are stated in the R-code.
 
 ---
 **Obtaining the PRO-ACT database & data preperation**
